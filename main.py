@@ -15,8 +15,8 @@ static_folder=os.path.abspath(Config.STATIC_FOLDER))
 app.config.from_object(Config)
 db.init_app(app)
 
-@app.route('/')
-def hello_world():
+@app.route('/kolo')
+def kolo():
     dancesl = []
     dancesq = dances.query.all()
     for i in dancesq:
@@ -46,7 +46,18 @@ def hello_world():
     
     resp = make_response(render_template("kolo.html", **context))
     return resp 
-
+@app.route('/')
+def index():
+    resp = make_response(render_template("index.html"))
+    return resp 
+@app.route('/drawing')
+def drawing():
+    resp = make_response(render_template("drawing.html"))
+    return resp 
+@app.route('/day')
+def day():
+    resp = make_response(render_template("day.html"))
+    return resp 
 # Create a namespace for the API
 api(app=app)
 
