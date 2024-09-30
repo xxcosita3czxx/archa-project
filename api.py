@@ -1,5 +1,5 @@
 from flask_restx import Api, Resource
-#from database import db
+from database import db
 
 #TODO obrazek + meta
 #TODO hlaska + meta
@@ -20,7 +20,7 @@ def api(app):
     @api.route("/day/info")
     class DayInfo(Resource):
         def get(self):
-            pass
+            pass #TODO here
 
     @api.route("/accounts/create")
     class AccountCreate(Resource):
