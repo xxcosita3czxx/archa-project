@@ -7,9 +7,8 @@ api = Api(app, doc='/swagger')  # Swagger UI at /swagger
 # Serve frontend files from 'frontend/' directory as root
 @app.route('/')
 def hello_world():
-    return render_template("index.html")
-
-# Create a namespace for the API
+    return render_template("frontend\index.html")
+  
 ns = api.namespace('api', description='API operations')
 
 # API Endpoint
