@@ -105,9 +105,16 @@
             <div class="palette">
                 <div class="color" style="background-color: #000000;" data-color="#000000"></div>
                 <div class="color" style="background-color: #808080;" data-color="#808080"></div>
+                <div class="color" style="background-color: #A9A9A9;" data-color="#A9A9A9"></div>
                 <div class="color" style="background-color: #C0C0C0;" data-color="#C0C0C0"></div>
                 <div class="color" style="background-color: #FFFFFF;" data-color="#FFFFFF"></div>
-                <div class="color" style="background-color: #A9A9A9;" data-color="#A9A9A9"></div>
+                <button id="fillBucketBtn" class="btn btn-secondary mt-3 ms-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-bucket" viewBox="0 0 16 16">
+                        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h.5a.5.5 0 0 1 .5.5v.5H15v12H1V2h.5V1a.5.5 0 0 1 .5-.5zm0 2v12h9V2H3.5z"/>
+                        <path d="M6.5 6.5a.5.5 0 0 1 .5.5v1h-1v-1a.5.5 0 0 1 .5-.5zm2.5.5a.5.5 0 0 1 .5-.5h1v1h-1v-1a.5.5 0 0 1-.5-.5z"/>
+                    </svg>
+                    Fill Bucket
+                </button>
             </div>
 
     <!-- Main content -->
@@ -129,7 +136,6 @@
             <div class="text-center">
                 <button id="sendImagesBtn" class="btn btn-primary mt-3">Send Image and Drawing</button>
             </div>
-
             <!-- Confirmation Section -->
             <div id="confirmation" class="alert alert-success text-center" role="alert"></div>
         </div>
@@ -143,10 +149,11 @@
         const img = document.getElementById('image');
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
-
+    
         let currentColor = '#000000';
-        const pixelSize = 4;
-
+        const pixelSize = 5;
+        let bucketMode = false; // State to track if bucket mode is active
+    
         function loadImage(imageSrc) {
             img.onload = function() {
                 canvas.width = img.width;
@@ -155,42 +162,52 @@
             };
             img.src = imageSrc;
         }
-
+    
         loadImage(img.src);
-
+    
         document.querySelectorAll('.color').forEach(color => {
             color.addEventListener('click', function() {
                 currentColor = this.getAttribute('data-color');
             });
         });
-
+    
+        // Bucket Fill Tool
+        document.getElementById('fillBucketBtn').addEventListener('click', () => {
+            bucketMode = !bucketMode; // Toggle bucket mode
+        });
+    
         canvas.addEventListener('mousedown', startDrawing);
         canvas.addEventListener('touchstart', startDrawing);
-
+    
         function startDrawing(e) {
             e.preventDefault();
             const rect = canvas.getBoundingClientRect();
             const x = e.clientX || e.touches[0].clientX;
             const y = e.clientY || e.touches[0].clientY;
-            drawPixel(Math.floor((x - rect.left) / pixelSize) * pixelSize, Math.floor((y - rect.top) / pixelSize) * pixelSize);
-            canvas.addEventListener('mousemove', draw);
-            canvas.addEventListener('touchmove', draw);
+    
+            if (bucketMode) {
+                fillBucket(Math.floor((x - rect.left) / pixelSize) * pixelSize, Math.floor((y - rect.top) / pixelSize) * pixelSize);
+            } else {
+                drawPixel(Math.floor((x - rect.left) / pixelSize) * pixelSize, Math.floor((y - rect.top) / pixelSize) * pixelSize);
+                canvas.addEventListener('mousemove', draw);
+                canvas.addEventListener('touchmove', draw);
+            }
         }
-
+    
         canvas.addEventListener('mouseup', stopDrawing);
         canvas.addEventListener('touchend', stopDrawing);
         canvas.addEventListener('mouseleave', stopDrawing);
-
+    
         function stopDrawing() {
             canvas.removeEventListener('mousemove', draw);
             canvas.removeEventListener('touchmove', draw);
         }
-
+    
         function drawPixel(x, y) {
             ctx.fillStyle = currentColor;
             ctx.fillRect(x, y, pixelSize, pixelSize);
         }
-
+    
         function draw(e) {
             e.preventDefault();
             const rect = canvas.getBoundingClientRect();
@@ -198,32 +215,72 @@
             const y = e.clientY || e.touches[0].clientY;
             drawPixel(Math.floor((x - rect.left) / pixelSize) * pixelSize, Math.floor((y - rect.top) / pixelSize) * pixelSize);
         }
-
+    
         function drawGrid() {
             ctx.strokeStyle = '#e0e0e0';
             ctx.lineWidth = 1;
-
+    
             for (let x = 0; x <= canvas.width; x += pixelSize) {
                 ctx.moveTo(x, 0);
                 ctx.lineTo(x, canvas.height);
             }
-
+    
             for (let y = 0; y <= canvas.height; y += pixelSize) {
                 ctx.moveTo(0, y);
                 ctx.lineTo(canvas.width, y);
             }
-
+    
             ctx.stroke();
         }
-
+    
+        // Implement the bucket fill functionality
+        function fillBucket(x, y) {
+            const targetColor = ctx.getImageData(x, y, pixelSize, pixelSize).data;
+            const targetColorHex = `rgba(${targetColor[0]}, ${targetColor[1]}, ${targetColor[2]}, ${targetColor[3]})`;
+    
+            if (targetColorHex === currentColor) return; // If the color is already the same, do nothing
+    
+            const stack = [[x, y]];
+            const width = canvas.width;
+            const height = canvas.height;
+    
+            while (stack.length) {
+                const [px, py] = stack.pop();
+    
+                if (px < 0 || px >= width || py < 0 || py >= height) continue;
+    
+                const currentPixel = ctx.getImageData(px, py, pixelSize, pixelSize).data;
+                const currentColorHex = `rgba(${currentPixel[0]}, ${currentPixel[1]}, ${currentPixel[2]}, ${currentPixel[3]})`;
+    
+                if (currentColorHex !== targetColorHex) continue;
+    
+                drawPixel(px, py); // Fill the pixel with the current color
+    
+                // Push neighboring pixels onto the stack
+                stack.push([px + pixelSize, py]);
+                stack.push([px - pixelSize, py]);
+                stack.push([px, py + pixelSize]);
+                stack.push([px, py - pixelSize]);
+            }
+        }
+    
         document.getElementById('sendImagesBtn').addEventListener('click', () => {
-            const canvasDataUrl = canvas.toDataURL('image/jpeg');
+            // Create a temporary canvas to capture the image without the grid
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCanvas.width = canvas.width;
+            tempCanvas.height = canvas.height;
+            
+            // Draw the current canvas to the temporary canvas
+            tempCtx.drawImage(canvas, 0, 0);
+    
+            const canvasDataUrl = tempCanvas.toDataURL('image/jpeg');
             const originalImageUrl = img.src;
-
+    
             const formData = new FormData();
             formData.append('canvas_image', dataURLtoBlob(canvasDataUrl), 'drawing.jpg');
             formData.append('original_image', originalImageUrl);
-
+    
             fetch('/upload', {
                 method: 'POST',
                 body: formData
@@ -242,7 +299,7 @@
                 console.error('Error:', error);
             });
         });
-
+    
         function dataURLtoBlob(dataURL) {
             const byteString = atob(dataURL.split(',')[1]);
             const mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
