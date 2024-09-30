@@ -4,6 +4,10 @@ import sqlalchemy
 from database import db, test, dances
 from config import Config
 import os
+
+#TODO Neural Network image check
+
+
 #init, do not touch
 app = Flask(__name__,
 template_folder=os.path.abspath(Config.TEMPLATE_FOLDER),
