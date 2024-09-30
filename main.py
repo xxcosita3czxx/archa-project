@@ -4,7 +4,12 @@ import sqlalchemy
 from database import db, test, dances, theatres, Visual, musics
 from config import Config
 import os
+import requests
+from PIL import Image
+from io import BytesIO
+from werkzeug.datastructures import FileStorage
 
+from PIL import Image
 #TODO Neural Network image check
 
 
@@ -14,7 +19,16 @@ template_folder=os.path.abspath(Config.TEMPLATE_FOLDER),
 static_folder=os.path.abspath(Config.STATIC_FOLDER))
 app.config.from_object(Config)
 db.init_app(app)
-
+def get_image_from_url(image_url):
+    response = requests.get(image_url)
+    if response.status_code == 200:
+    # Create an image object from the downloaded data
+        image = Image.open(BytesIO(response.content))
+        image_buffer = BytesIO()
+        image.save(image_buffer, format='JPEG')
+        image_buffer.seek(0)
+        file_storage = FileStorage(image_buffer, filename="drawing.jpg", content_type="image/jpeg")
+        return file_storage
 @app.route('/kolo')
 def kolo():
     dancesl = []
@@ -65,9 +79,22 @@ def upload():
     if 'canvas_image' in request.files:
         canvas_image = request.files['canvas_image']
         print(canvas_image)
+        
     if 'original_image' in request.form:
         original_image_url = request.form['original_image']
         print(f"Original image URL: {original_image_url}")
+    print(get_image_from_url(original_image_url))
+    image = Image.open(get_image_from_url(original_image_url)   )
+    image.show()
+    background = Image.open(get_image_from_url(original_image_url))
+    overlay = Image.open(canvas_image)
+
+    background = background.convert("RGBA")
+    overlay = overlay.convert("RGBA")
+
+    new_img = Image.blend(background, overlay, 0.5)
+    image = Image.open(new_img)
+    image.show()
     return redirect("/drawing")
 # API Endpoint
 
