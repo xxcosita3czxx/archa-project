@@ -21,7 +21,7 @@ def api(app):
         def get(self):
             return "listing ig...."
 
-    @api.route('/api/accounts/<str:uuid>/info', methods=['GET'])
+    @api.route('/api/accounts/<uuid>/info', methods=['GET'])
     class AccountIdInfo(Resource):
         def get(self, uuid):
             return f"{uuid} info"
