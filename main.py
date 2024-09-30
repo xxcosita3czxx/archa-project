@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, make_response
 from api import api
 import sqlalchemy
 from database import db, test
@@ -15,8 +15,11 @@ with app.app_context():
 
 @app.route('/')
 def hello_world():
-    testq=test.query.all()
-    return render_template("index.html")
+    context = {
+        "tst":"tst"
+    }
+    resp = make_response(render_template("kolo.html", **context))
+    return resp 
 
 # Create a namespace for the API
 api(app=app)

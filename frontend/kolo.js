@@ -7,7 +7,7 @@ const artForms = [
 
 const challenges = {
     'visuální umění': [
-        "Rekonstruj slavný obraz pouze pomocí emotikonů",
+        "Rekoemotikonůnstruj slavný obraz pouze pomocí ",
         "Nakresli autoportrét nedominantní rukou.",
         "Vytvoř koláž představující váš týden pouze pomocí výstřižků z časopisů.",
     ],
