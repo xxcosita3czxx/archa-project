@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 from api import api
 
-app = Flask(__name__, static_folder='./frontend')
+app = Flask(__name__, static_folder='./frontend', template_folder='./frontend')
 
 
 # Serve frontend files from 'frontend/' directory as root
