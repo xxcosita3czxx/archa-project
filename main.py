@@ -15,7 +15,7 @@ with app.app_context():
 
 @app.route('/')
 def hello_world():
-    testq=querydb(test)
+    testq=test.query.all()
     return render_template("index.html")
 
 # Create a namespace for the API
