@@ -119,9 +119,9 @@
             "Improvizuj reklamu na směšný produkt",
         ],
         'taneční': [
-            "Choreografuj 15sekundového tance na oblíbenou meme píseň",
-            "Vytvoř TikTok tanec napsaný nějakým AI",
-            "Vytvoř taneční pohyb inspirovaný vaším domácím mazlíčkem nebo oblíbeným zvířetem.",
+            {% for i in dances %}
+                "{{i}}",
+            {%endfor%}
         ],
     };
     
@@ -182,7 +182,7 @@
     
             // Display the selected challenge
             displayChallenge(selectedArt);
-        }, 3000);  // Duration of the spin
+        }, 10000);  // Duration of the spin
     }function displayChallenge(artForm) {
         const artChallenges = challenges[artForm.name];
         const randomChallenge = artChallenges[Math.floor(Math.random() * artChallenges.length)];

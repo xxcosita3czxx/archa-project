@@ -1,4 +1,5 @@
 from flask_restx import Api, Resource
+#from database import db
 
 #TODO obrazek + meta
 #TODO hlaska + meta
@@ -8,7 +9,7 @@ def api(app):
     api_ns = Api(app, doc='/api/')  # Swagger UI at /swagger
 
     # Create a namespace for the API
-    api = api_ns.namespace('api', description='API operations')
+    api = api_ns.namespace('api', description='API')
 
     # API Endpoint
     @api.route('/hello')
@@ -20,6 +21,7 @@ def api(app):
     class DayInfo(Resource):
         def get(self):
             pass
+
     @api.route("/accounts/create")
     class AccountCreate(Resource):
         def post(self):
@@ -29,7 +31,7 @@ def api(app):
         def get(self):
             return "listing ig...."
 
-    @api.route('/api/accounts/<uuid>/info', methods=['GET'])
+    @api.route('/api/accounts/<uuid>/info')
     class AccountIdInfo(Resource):
         def get(self, uuid):
             return f"{uuid} info"
