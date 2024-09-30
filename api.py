@@ -1,5 +1,5 @@
 from flask_restx import Api, Resource
-#from database import dbEdit
+#from database import db
 
 #TODO obrazek + meta
 #TODO hlaska + meta
