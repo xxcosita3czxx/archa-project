@@ -38,22 +38,59 @@ let spinning = false;
 
 spinButton.addEventListener('click', spinWheel);
 
+let currentRotation = 0;  // Keep track of the current rotation
+
 function spinWheel() {
     if (spinning) return;
     spinning = true;
-    const randomDegree = Math.floor(Math.random() * 360) + 720; // At least two full rotations
-    wheel.style.transform = `rotate(${randomDegree}deg)`;
+
+    // Generate a random degree between 720 and 1080 (2-3 full rotations)
+    const randomDegree = Math.floor(Math.random() * 360) + 720;
     
+    // Add the random degree to the current rotation
+    currentRotation += randomDegree;
+    
+    // Apply the rotation to the wheel
+    wheel.style.transform = `rotate(${currentRotation}deg)`;
+
     setTimeout(() => {
         spinning = false;
-        const finalRotation = randomDegree % 360;
-        const selectedIndex = Math.floor(finalRotation / 90);
-        const selectedArt = artForms[selectedIndex];
-        displayChallenge(selectedArt);
-    }, 3000);
-}
 
-function displayChallenge(artForm) {
+        // Calculate the final rotation within the 360-degree range
+        let finalRotation = currentRotation % 360;
+
+
+        while (finalRotation > 360) {
+            finalRotation -= 360;
+        }
+
+        // Check the final angle with multiple if conditions
+        let selectedArt;
+
+        if (finalRotation < 90) {
+            console.log("Méně než 90");
+            selectedArt = artForms.find(art => art.name === 'Music'); // Music
+        } 
+        
+        if (finalRotation >= 90 && finalRotation < 180) {
+            console.log("Více než 90, ale méně než 180");
+            selectedArt = artForms.find(art => art.name === 'Visual Art'); // Visual Art
+        } 
+        
+        if (finalRotation >= 180 && finalRotation < 270) {
+            console.log("Více než 180, ale méně než 270");
+            selectedArt = artForms.find(art => art.name === 'Dance'); // Theater
+        } 
+        
+        if (finalRotation >= 270 && finalRotation < 360) {
+            console.log("Více než 270, ale méně než 360");
+            selectedArt = artForms.find(art => art.name === 'Theater'); // Dance
+        }
+
+        // Display the selected challenge
+        displayChallenge(selectedArt);
+    }, 3000);  // Duration of the spin
+}function displayChallenge(artForm) {
     const artChallenges = challenges[artForm.name];
     const randomChallenge = artChallenges[Math.floor(Math.random() * artChallenges.length)];
     
