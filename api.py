@@ -21,10 +21,10 @@ def api(app):
         def get(self):
             return "listing ig...."
 
-    @api.route('/api/accounts/<int:acc_id>/info', methods=['GET'])
+    @api.route('/api/accounts/<str:uuid>/info', methods=['GET'])
     class AccountIdInfo(Resource):
-        def get(self, acc_id):
-            return f"{acc_id} info"
+        def get(self, uuid):
+            return f"{uuid} info"
 
     @api.route("/accounts/delete")
     class AccountDelete(Resource):
