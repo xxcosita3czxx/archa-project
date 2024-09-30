@@ -54,7 +54,7 @@ def index():
     return resp 
 @app.route('/drawing')
 def drawing():
-    resp = make_response(render_template("drawing1.html"))
+    resp = make_response(render_template("drawing.html"))
     return resp 
 @app.route('/day')
 def day():
