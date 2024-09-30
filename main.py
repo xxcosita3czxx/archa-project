@@ -1,14 +1,20 @@
 from flask import Flask, render_template
 from api import api
 import sqlalchemy
-from database import 
-
-app = Flask(__name__, static_folder='./frontend', template_folder='./frontend')
-
+from database import db, test
+from config import Config
+import os
+app = Flask(__name__,
+template_folder=os.path.abspath(Config.TEMPLATE_FOLDER),
+static_folder=os.path.abspath(Config.STATIC_FOLDER))
+app.config.from_object(Config)
+db.init_app(app)
 
 # Serve frontend files from 'frontend/' directory as root
 @app.route('/')
 def hello_world():
+    
+    print(test.query.first())
     return render_template("index.html")
 
 # Create a namespace for the API
