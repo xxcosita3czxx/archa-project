@@ -1,4 +1,4 @@
-const artForms = [
+/*const artForms = [
     { name: 'visuální umění', icon: '🎨', color: '#FF9AA2' },
     { name: 'hudební', icon: '🎵', color: '#FFB7B2' },
     { name: 'divadelní', icon: '🎭', color: '#FFDAC1' },
@@ -7,7 +7,7 @@ const artForms = [
 
 const challenges = {
     'visuální umění': [
-        "Rekonstruj slavný obraz pouze pomocí emotikonů",
+        "Rekoemotikonůnstruj slavný obraz pouze pomocí ",
         "Nakresli autoportrét nedominantní rukou.",
         "Vytvoř koláž představující váš týden pouze pomocí výstřižků z časopisů.",
     ],
@@ -93,4 +93,4 @@ function spinWheel() {
     challengeText.textContent = `Tvoje ${artForm.name} Challenge:`;
     challenge.textContent = randomChallenge;
     challengeContainer.style.display = 'block';
-}
+}*/
