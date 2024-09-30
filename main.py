@@ -9,16 +9,35 @@ from PIL import Image, ImageOps
 import numpy as np
 from io import BytesIO
 from skimage.metrics import structural_similarity as ssim
-#TODO Neural Network image check
-
-
 #init, do not touch
 app = Flask(__name__,
 template_folder=os.path.abspath(Config.TEMPLATE_FOLDER),
 static_folder=os.path.abspath(Config.STATIC_FOLDER))
 app.config.from_object(Config)
 db.init_app(app)
+# Pexels API URL for curated photos
+PEXELS_API_URL = "https://api.pexels.com/v1/curated"
 
+# Your Pexels API Key (replace with your actual API key)
+API_KEY = "mRYAqZwSRevy7tasb0xx4RdFUraLC76uJNO2vkwpcLMLrYhRHl56t2AL"
+
+# Function to fetch curated photos
+def get_curated_photos(page=1, per_page=15):
+    headers = {
+        "Authorization": API_KEY
+    }
+    params = {
+        "page": page,
+        "per_page": per_page
+    }
+    
+    response = requests.get(PEXELS_API_URL, headers=headers, params=params)
+    
+    if response.status_code == 200:
+        data = response.json()
+        return data
+    else:
+        print(f"Error: {response.status_code}")
 @app.route('/kolo')
 def kolo():
     dancesl = []
@@ -60,6 +79,7 @@ def drawing():
     return resp 
 @app.route('/day')
 def day():
+    request.make
     resp = make_response(render_template("day.html"))
     return resp 
 # Create a namespace for the API
