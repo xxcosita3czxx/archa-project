@@ -14,19 +14,44 @@
             margin: 0;
         }
         .navbar {
-            margin-bottom: 20px; /* Space below the navbar */
+            margin-bottom: 20px;
         }
-        .container {
+        .main-container {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            height: calc(100vh - 56px); /* Adjust for navbar height */
+            padding: 20px;
+        }
+        .content-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .img-canvas-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        @media (min-width: 992px) {
+            .img-canvas-container {
+                flex-direction: row;
+                justify-content: center;
+            }
         }
         .vertical-line {
-            width: 2px;
-            background-color: black;
-            height: 100%;
-            margin: 0 20px;
+            display: none;
+        }
+        @media (min-width: 992px) {
+            .vertical-line {
+                display: block;
+                width: 2px;
+                height: auto;
+                background-color: black;
+                margin: 0 20px;
+            }
         }
         #canvas {
             border: 1px solid black;
@@ -36,22 +61,12 @@
             display: flex;
             justify-content: center;
             align-items: center;
-        }
-        .thumbnail {
-            width: 100px;
-            height: auto;
-            cursor: pointer;
-            margin: 5px;
-        }
-        .thumbnail-container {
-            display: flex;
-            flex-wrap: wrap;
-            margin-bottom: 20px; /* Space between thumbnails and canvas */
+            margin-bottom: 20px;
         }
         .palette {
             display: flex;
             justify-content: center;
-            margin-bottom: 20px; /* Space between palette and canvas */
+            margin-bottom: 20px;
         }
         .color {
             width: 30px;
@@ -62,65 +77,63 @@
         }
         #confirmation {
             margin-top: 20px;
-            display: none; /* Initially hidden */
+            display: none;
         }
     </style>
 </head>
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <button
-            class="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbar"
-            aria-controls="navbar"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-        >
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbar">
-          <div class="navbar-nav">
-<a class="nav-item nav-link" id="home" href="/">Home</a>
-            <a class="nav-item nav-link" id="logout" href="/kolo">kolo umění</a>
-            <a class="nav-item nav-link" id="login" href="/drawing">kreslení</a>
-            <a class="nav-item nav-link" id="signUp" href="/day">umění dne</a>
-          </div>
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbar">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link" id="home" href="/">Home</a>
+                    <a class="nav-item nav-link" id="logout" href="/kolo">kolo umění</a>
+                    <a class="nav-item nav-link" id="login" href="/drawing">kreslení</a>
+                    <a class="nav-item nav-link" id="signUp" href="/day">umění dne</a>
+                </div>
+            </div>
         </div>
     </nav>
 
-    <!-- Color Palette -->
-    <div class="palette text-center">
-        <div class="color" style="background-color: #000000;" data-color="#000000"></div>
-        <div class="color" style="background-color: #808080;" data-color="#808080"></div>
-        <div class="color" style="background-color: #C0C0C0;" data-color="#C0C0C0"></div>
-        <div class="color" style="background-color: #FFFFFF;" data-color="#FFFFFF"></div>
-        <div class="color" style="background-color: #A9A9A9;" data-color="#A9A9A9"></div>
-    </div>
+    <div class="main-container">
+        <div class="content-container">
+            <!-- Color Palette -->
+            <div class="palette">
+                <div class="color" style="background-color: #000000;" data-color="#000000"></div>
+                <div class="color" style="background-color: #808080;" data-color="#808080"></div>
+                <div class="color" style="background-color: #C0C0C0;" data-color="#C0C0C0"></div>
+                <div class="color" style="background-color: #FFFFFF;" data-color="#FFFFFF"></div>
+                <div class="color" style="background-color: #A9A9A9;" data-color="#A9A9A9"></div>
+            </div>
 
     <!-- Main content -->
     <div class="container">
         <!-- Left side: Image -->
         <div class="img-container">
-            <img src="https://hatrabbits.com/wp-content/uploads/2017/01/random.jpg" alt="Image" id="image" class="img-fluid" style="filter: grayscale(100%);">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/450px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg" alt="Image" id="image" class="img-fluid" style="filter: grayscale(100%);">
         </div>
         <!-- Middle: Vertical Line -->
         <div class="vertical-line"></div>
 
-        <!-- Right side: Canvas -->
-        <div class="canvas-container">
-            <canvas id="canvas"></canvas>
+                <!-- Right side: Canvas -->
+                <div class="canvas-container">
+                    <canvas id="canvas"></canvas>
+                </div>
+            </div>
+
+            <!-- Button to send images to the backend -->
+            <div class="text-center">
+                <button id="sendImagesBtn" class="btn btn-primary mt-3">Send Image and Drawing</button>
+            </div>
+
+            <!-- Confirmation Section -->
+            <div id="confirmation" class="alert alert-success text-center" role="alert"></div>
         </div>
     </div>
-
-    <!-- Button to send images to the backend -->
-    <div class="text-center">
-        <button id="sendImagesBtn" class="btn btn-primary mt-3">Send Image and Drawing</button>
-    </div>
-
-    <!-- Confirmation Section -->
-    <div id="confirmation" class="alert alert-success text-center" role="alert"></div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
@@ -131,66 +144,63 @@
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
 
-        // Set default drawing color
-        let currentColor = '#000000'; // Black
-
-        // Define pixel size
+        let currentColor = '#000000';
         const pixelSize = 4;
 
-        // Function to load an image from a URL
         function loadImage(imageSrc) {
-            img.src = imageSrc;
             img.onload = function() {
                 canvas.width = img.width;
                 canvas.height = img.height;
                 drawGrid();
             };
+            img.src = imageSrc;
         }
 
-        // Load default image
         loadImage(img.src);
 
-        // Function to change the drawing color
         document.querySelectorAll('.color').forEach(color => {
             color.addEventListener('click', function() {
                 currentColor = this.getAttribute('data-color');
             });
         });
 
-        // Enable pixel art drawing functionality on the canvas
-        canvas.addEventListener('mousedown', (e) => {
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('touchstart', startDrawing);
+
+        function startDrawing(e) {
+            e.preventDefault();
             const rect = canvas.getBoundingClientRect();
-            const x = Math.floor((e.clientX - rect.left) / pixelSize) * pixelSize;
-            const y = Math.floor((e.clientY - rect.top) / pixelSize) * pixelSize;
-            drawPixel(x, y);
+            const x = e.clientX || e.touches[0].clientX;
+            const y = e.clientY || e.touches[0].clientY;
+            drawPixel(Math.floor((x - rect.left) / pixelSize) * pixelSize, Math.floor((y - rect.top) / pixelSize) * pixelSize);
             canvas.addEventListener('mousemove', draw);
-        });
+            canvas.addEventListener('touchmove', draw);
+        }
 
-        canvas.addEventListener('mouseup', () => {
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('touchend', stopDrawing);
+        canvas.addEventListener('mouseleave', stopDrawing);
+
+        function stopDrawing() {
             canvas.removeEventListener('mousemove', draw);
-        });
+            canvas.removeEventListener('touchmove', draw);
+        }
 
-        canvas.addEventListener('mouseleave', () => {
-            canvas.removeEventListener('mousemove', draw);
-        });
-
-        // Function to draw a pixel on the canvas
         function drawPixel(x, y) {
-            ctx.fillStyle = currentColor; // Use the selected color
+            ctx.fillStyle = currentColor;
             ctx.fillRect(x, y, pixelSize, pixelSize);
         }
 
-        // Function to draw a pixel when mouse is moved
         function draw(e) {
+            e.preventDefault();
             const rect = canvas.getBoundingClientRect();
-            const x = Math.floor((e.clientX - rect.left) / pixelSize) * pixelSize;
-            const y = Math.floor((e.clientY - rect.top) / pixelSize) * pixelSize;
-            drawPixel(x, y);
+            const x = e.clientX || e.touches[0].clientX;
+            const y = e.clientY || e.touches[0].clientY;
+            drawPixel(Math.floor((x - rect.left) / pixelSize) * pixelSize, Math.floor((y - rect.top) / pixelSize) * pixelSize);
         }
 
-        // Function to draw a pixel grid on the canvas
         function drawGrid() {
-            ctx.strokeStyle = '#e0e0e0'; // Light gray for grid lines
+            ctx.strokeStyle = '#e0e0e0';
             ctx.lineWidth = 1;
 
             for (let x = 0; x <= canvas.width; x += pixelSize) {
@@ -206,41 +216,33 @@
             ctx.stroke();
         }
 
-        // Function to send images to the Flask backend
         document.getElementById('sendImagesBtn').addEventListener('click', () => {
-            // Convert canvas to data URL
             const canvasDataUrl = canvas.toDataURL('image/jpeg');
-
-            // Original image URL
             const originalImageUrl = img.src;
 
-            // Create FormData
             const formData = new FormData();
             formData.append('canvas_image', dataURLtoBlob(canvasDataUrl), 'drawing.jpg');
             formData.append('original_image', originalImageUrl);
 
-            // Send data to the backend
             fetch('/upload', {
                 method: 'POST',
                 body: formData
             })
             .then(response => response.json())
             .then(data => {
-                // Show success message and received data
                 const confirmationDiv = document.getElementById('confirmation');
                 confirmationDiv.innerHTML = `
                     ${data.message} <br>
                     Canvas Image Path: ${data.canvas_image_path} <br>
                     Original Image URL: ${data.original_image_url}
                 `;
-                confirmationDiv.style.display = 'block'; // Show confirmation
+                confirmationDiv.style.display = 'block';
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
         });
 
-        // Convert Data URL to Blob
         function dataURLtoBlob(dataURL) {
             const byteString = atob(dataURL.split(',')[1]);
             const mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
