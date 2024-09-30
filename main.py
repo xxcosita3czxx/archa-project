@@ -1,14 +1,15 @@
 from flask import Flask, send_from_directory, render_template
-from flask_restx import Api, Resource
+from api import api
 
 app = Flask(__name__, static_folder='frontend')
-api = Api(app, doc='/swagger')  # Swagger UI at /swagger
+
 
 # Serve frontend files from 'frontend/' directory as root
 @app.route('/')
 def hello_world():
-    return render_template("frontend\index.html")
-  
+    return render_template("index.html")
+
+# Create a namespace for the API
 ns = api.namespace('api', description='API operations')
 
 # API Endpoint
