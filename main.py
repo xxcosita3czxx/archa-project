@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, make_response
 from api import api
 import sqlalchemy
 from database import db, test
@@ -12,12 +12,14 @@ app.config.from_object(Config)
 db.init_app(app)
 with app.app_context():
     db.create_all()
-# Serve frontend files from 'frontend/' directory as root
+
 @app.route('/')
 def hello_world():
-    testq = test.query.all()
-    print(test)
-    return render_template("index.html")
+    context = {
+        "tst":"tst"
+    }
+    resp = make_response(render_template("kolo.html", **context))
+    return resp 
 
 # Create a namespace for the API
 api(app=app)
