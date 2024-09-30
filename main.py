@@ -1,4 +1,4 @@
-from flask import Flask, send_from_directory, render_template
+from flask import Flask, render_template
 from api import api
 
 app = Flask(__name__, static_folder='./frontend')
