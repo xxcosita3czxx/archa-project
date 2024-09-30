@@ -92,19 +92,11 @@ def upload():
     background = background.convert("RGBA")
     overlay = overlay.convert("RGBA")
 
-    overlay = overlay.resize(background.size)
-    img1_np = np.array(overlay)
-    img2_np = np.array(background)
-
-    # Compute the mean squared error (MSE) between the two images
-    mse = np.mean((img1_np - img2_np) ** 2)
-
-    # Calculate maximum possible MSE for normalization (255 is max pixel value for grayscale images)
-    max_mse = 255 ** 2
-
-    # Compute similarity percentage (100% means identical, 0% means fully different)
-    similarity = 100 * (1 - (mse / max_mse))
-    print(similarity)
+    
+    overlay = overlay.resize((overlay.width // 3, overlay.height // 3), Image.LANCZOS)
+    background = background.resize((background.width // 3, background.height // 3), Image.LANCZOS)
+    background.show()
+    overlay.show()
     return redirect("/drawing")
 # API Endpoint
 
