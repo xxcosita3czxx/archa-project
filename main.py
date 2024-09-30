@@ -15,8 +15,9 @@ with app.app_context():
 # Serve frontend files from 'frontend/' directory as root
 @app.route('/')
 def hello_world():
-    testq = test.query.all()
-    print(testq)
+    testq = test.query.first()
+    if testq:
+        print("yippee")
     return render_template("index.html")
 
 # Create a namespace for the API
