@@ -1,13 +1,32 @@
 from flask_restx import Api, Resource
 
 def api(app):
-    api = Api(app, doc='/api/docs')  # Swagger UI at /swagger
+    api_ns = Api(app, doc='/api/')  # Swagger UI at /swagger
 
     # Create a namespace for the API
-    ns = api.namespace('api', description='API operations')
+    api = api_ns.namespace('api', description='API operations')
 
     # API Endpoint
-    @ns.route('/api/hello')
+    @api.route('/hello')
     class HelloWorld(Resource):
         def get(self):
             return {'message': 'Hello, World!'}
+    
+    @api.route("/accounts/create")
+    class AccountCreate(Resource):
+        def post(self):
+            return "making ig...."
+    @api.route("/accounts/list")
+    class AccountList(Resource):
+        def get(self):
+            return "listing ig...."
+
+    @api.route('/api/accounts/<int:acc_id>/info', methods=['GET'])
+    class AccountIdInfo(Resource):
+        def get(self, acc_id):
+            return f"{acc_id} info"
+
+    @api.route("/accounts/delete")
+    class AccountDelete(Resource):
+        def delete(self):
+            return "deleting ig...."
