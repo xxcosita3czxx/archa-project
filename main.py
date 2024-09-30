@@ -9,7 +9,7 @@ template_folder=os.path.abspath(Config.TEMPLATE_FOLDER),
 static_folder=os.path.abspath(Config.STATIC_FOLDER))
 app.config.from_object(Config)
 db.init_app(app)
-    
+
 with app.app_context():
     db.create_all()
 
@@ -17,7 +17,7 @@ with app.app_context():
 @app.route('/')
 def hello_world():
     
-    print(test.query.first())
+    print(test.query.first().test)
     return render_template("index.html")
 
 # Create a namespace for the API
