@@ -12,9 +12,6 @@ app.config.from_object(Config)
 db.init_app(app)
 with app.app_context():
     db.create_all()
-with app.app_context():
-    db.drop_all()
-    db.create_all()
 # Serve frontend files from 'frontend/' directory as root
 @app.route('/')
 def hello_world():
