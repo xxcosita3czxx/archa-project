@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cs">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,37 +31,19 @@
         }
         .img-canvas-container {
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            justify-content: center;
             width: 100%;
         }
-        @media (min-width: 992px) {
-            .img-canvas-container {
-                flex-direction: row;
-                justify-content: center;
-            }
-        }
-        .vertical-line {
-            display: none;
-        }
-        @media (min-width: 992px) {
-            .vertical-line {
-                display: block;
-                width: 2px;
-                height: auto;
-                background-color: black;
-                margin: 0 20px;
-            }
+        .img-container, .canvas-container {
+            flex: 1;
+            margin: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         #canvas {
             border: 1px solid black;
             background-color: white;
-        }
-        .img-container, .canvas-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
         }
         .palette {
             display: flex;
@@ -78,6 +60,20 @@
         #confirmation {
             margin-top: 20px;
             display: none;
+        }
+        
+        /* Media Query for smaller screens */
+        @media (max-width: 768px) {
+            .img-canvas-container {
+                flex-direction: column; /* Stack them on small screens */
+            }
+            .img-container, .canvas-container {
+                width: 100%; /* Make them full width */
+                margin: 0; /* Remove margin */
+            }
+            .img-container {
+                margin-bottom: 10px; /* Add a margin below the image for spacing */
+            }
         }
     </style>
 </head>
@@ -102,29 +98,22 @@
     <div class="main-container">
         <div class="content-container">
             <!-- Color Palette -->
-            <div class="palette">
+            <div class="palette d-flex align-items-center">
                 <div class="color" style="background-color: #000000;" data-color="#000000"></div>
                 <div class="color" style="background-color: #808080;" data-color="#808080"></div>
                 <div class="color" style="background-color: #A9A9A9;" data-color="#A9A9A9"></div>
                 <div class="color" style="background-color: #C0C0C0;" data-color="#C0C0C0"></div>
                 <div class="color" style="background-color: #FFFFFF;" data-color="#FFFFFF"></div>
-                <button id="fillBucketBtn" class="btn btn-secondary mt-3 ms-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-bucket" viewBox="0 0 16 16">
-                        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h.5a.5.5 0 0 1 .5.5v.5H15v12H1V2h.5V1a.5.5 0 0 1 .5-.5zm0 2v12h9V2H3.5z"/>
-                        <path d="M6.5 6.5a.5.5 0 0 1 .5.5v1h-1v-1a.5.5 0 0 1 .5-.5zm2.5.5a.5.5 0 0 1 .5-.5h1v1h-1v-1a.5.5 0 0 1-.5-.5z"/>
-                    </svg>
-                    Fill Bucket
-                </button>
+                <div id="fillBucketContainer" class="d-flex align-items-center ms-1" style="cursor: pointer;">
+                    <div id="bucketStatus" style="width: 30px; height: 30px; background-color: green; border: 1px solid black;"></div>
+                </div>
             </div>
-
-    <!-- Main content -->
-    <div class="container">
-        <!-- Left side: Image -->
-        <div class="img-container">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/450px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg" alt="Image" id="image" class="img-fluid" style="filter: grayscale(100%);">
-        </div>
-        <!-- Middle: Vertical Line -->
-        <div class="vertical-line"></div>
+            <!-- Main content -->
+            <div class="img-canvas-container">
+                <!-- Left side: Image -->
+                <div class="img-container">
+                    <img id="image" class="img-fluid" style="filter: grayscale(100%);" alt="Image">
+                </div>
 
                 <!-- Right side: Canvas -->
                 <div class="canvas-container">
@@ -149,75 +138,110 @@
         const img = document.getElementById('image');
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
-    
+        
         let currentColor = '#000000';
         const pixelSize = 5;
-        let bucketMode = false; // State to track if bucket mode is active
+        let bucketMode = false; // Bucket mode initially off
+        let isDrawing = false; // To track if drawing is active
     
+<<<<<<< HEAD
         function loadImage(imageSrc) {
             img.onload = function() {
-                canvas.width = img.width;
-                canvas.height = img.height;
+                canvas.width = img.width/3;
+                canvas.height = img.height/3;
                 drawGrid();
             };
             img.src = imageSrc;
         }
+=======
+        // Array of image sources
+        const images = [
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/450px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/800px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg/330px-Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg",
+            "https://i.ytimg.com/vi/8vMd-jqj9R0/maxresdefault.jpg"
+        ];
+>>>>>>> c6aa3032ab05d2a5a83c8639df4efaf5f4376d34
     
-        loadImage(img.src);
+        // Randomly select an image from the array
+        const randomImage = images[Math.floor(Math.random() * images.length)];
+        img.src = randomImage; // Set the selected image as the source
     
+        document.getElementById('fillBucketContainer').addEventListener('click', () => {
+            bucketMode = !bucketMode; // Toggle bucket mode
+            const bucketStatus = document.getElementById('bucketStatus');
+            bucketStatus.style.backgroundColor = bucketMode ? 'red' : 'green';  // Change color based on bucket mode
+        });    
+    
+        img.onload = function() {
+            canvas.width = img.width;
+            canvas.height = img.height;
+            drawGrid();
+        };
+        
         document.querySelectorAll('.color').forEach(color => {
             color.addEventListener('click', function() {
                 currentColor = this.getAttribute('data-color');
             });
         });
-    
-        // Bucket Fill Tool
-        document.getElementById('fillBucketBtn').addEventListener('click', () => {
-            bucketMode = !bucketMode; // Toggle bucket mode
+        
+        // Mouse down event to start drawing
+        canvas.addEventListener('mousedown', (e) => {
+            isDrawing = true;
+            startDrawing(e);
         });
     
-        canvas.addEventListener('mousedown', startDrawing);
-        canvas.addEventListener('touchstart', startDrawing);
+        // Mouse up event to stop drawing
+        canvas.addEventListener('mouseup', () => {
+            isDrawing = false;
+            stopDrawing();
+        });
     
-        function startDrawing(e) {
-            e.preventDefault();
-            const rect = canvas.getBoundingClientRect();
-            const x = e.clientX || e.touches[0].clientX;
-            const y = e.clientY || e.touches[0].clientY;
+        // Mouse leave event to stop drawing
+        canvas.addEventListener('mouseleave', () => {
+            isDrawing = false;
+            stopDrawing();
+        });
     
-            if (bucketMode) {
-                fillBucket(Math.floor((x - rect.left) / pixelSize) * pixelSize, Math.floor((y - rect.top) / pixelSize) * pixelSize);
-            } else {
-                drawPixel(Math.floor((x - rect.left) / pixelSize) * pixelSize, Math.floor((y - rect.top) / pixelSize) * pixelSize);
-                canvas.addEventListener('mousemove', draw);
-                canvas.addEventListener('touchmove', draw);
+        // Mouse move event to draw
+        canvas.addEventListener('mousemove', (e) => {
+            if (isDrawing) {
+                draw(e);
             }
-        }
+        });
     
-        canvas.addEventListener('mouseup', stopDrawing);
-        canvas.addEventListener('touchend', stopDrawing);
-        canvas.addEventListener('mouseleave', stopDrawing);
+        // Touch events for mobile devices
+        canvas.addEventListener('touchstart', (e) => {
+            isDrawing = true;
+            startDrawing(e);
+        });
     
-        function stopDrawing() {
-            canvas.removeEventListener('mousemove', draw);
-            canvas.removeEventListener('touchmove', draw);
-        }
+        canvas.addEventListener('touchend', () => {
+            isDrawing = false;
+            stopDrawing();
+        });
+    
+        canvas.addEventListener('touchmove', (e) => {
+            if (isDrawing) {
+                draw(e);
+            }
+        });
     
         function drawPixel(x, y) {
             ctx.fillStyle = currentColor;
             ctx.fillRect(x, y, pixelSize, pixelSize);
         }
-    
+        
         function draw(e) {
-            e.preventDefault();
             const rect = canvas.getBoundingClientRect();
-            const x = e.clientX || e.touches[0].clientX;
-            const y = e.clientY || e.touches[0].clientY;
-            drawPixel(Math.floor((x - rect.left) / pixelSize) * pixelSize, Math.floor((y - rect.top) / pixelSize) * pixelSize);
+            const x = Math.floor((e.clientX || e.touches[0].clientX - rect.left) / pixelSize) * pixelSize;
+            const y = Math.floor((e.clientY || e.touches[0].clientY - rect.top) / pixelSize) * pixelSize;
+            drawPixel(x, y);
         }
+<<<<<<< HEAD
     
         function drawGrid() {
-            ctx.strokeStyle = '#e0e0e0';
+            ctx.strokeStyle = '#b00b69';
             ctx.lineWidth = 1;
     
             for (let x = 0; x <= canvas.width; x += pixelSize) {
@@ -234,82 +258,90 @@
         }
     
         // Implement the bucket fill functionality
+=======
+        
+>>>>>>> c6aa3032ab05d2a5a83c8639df4efaf5f4376d34
         function fillBucket(x, y) {
-            const targetColor = ctx.getImageData(x, y, pixelSize, pixelSize).data;
-            const targetColorHex = `rgba(${targetColor[0]}, ${targetColor[1]}, ${targetColor[2]}, ${targetColor[3]})`;
+            const imgData = ctx.getImageData(x, y, 1, 1);
+            const targetColor = `rgba(${imgData.data[0]}, ${imgData.data[1]}, ${imgData.data[2]}, ${imgData.data[3]})`;
+            const newColor = currentColor;
+        
+            if (targetColor !== newColor) {
+                floodFill(x, y, targetColor, newColor);
+            }
+        }
     
-            if (targetColorHex === currentColor) return; // If the color is already the same, do nothing
-    
-            const stack = [[x, y]];
+        function floodFill(x, y, targetColor, newColor) {
+            const pixelStack = [[x, y]];
             const width = canvas.width;
             const height = canvas.height;
+            const imageData = ctx.getImageData(0, 0, width, height);
+            const data = imageData.data;
     
-            while (stack.length) {
-                const [px, py] = stack.pop();
-    
-                if (px < 0 || px >= width || py < 0 || py >= height) continue;
-    
-                const currentPixel = ctx.getImageData(px, py, pixelSize, pixelSize).data;
-                const currentColorHex = `rgba(${currentPixel[0]}, ${currentPixel[1]}, ${currentPixel[2]}, ${currentPixel[3]})`;
-    
-                if (currentColorHex !== targetColorHex) continue;
-    
-                drawPixel(px, py); // Fill the pixel with the current color
-    
-                // Push neighboring pixels onto the stack
-                stack.push([px + pixelSize, py]);
-                stack.push([px - pixelSize, py]);
-                stack.push([px, py + pixelSize]);
-                stack.push([px, py - pixelSize]);
+            function getPixelIndex(x, y) {
+                return (y * width + x) * 4;
             }
+        
+            while (pixelStack.length) {
+                const newPos = pixelStack.pop();
+                const x = newPos[0];
+                const y = newPos[1];
+                const pixelIndex = getPixelIndex(x, y);
+    
+                if (x < 0 || x >= width || y < 0 || y >= height) continue;
+                if (data[pixelIndex] === targetColor[0] && data[pixelIndex + 1] === targetColor[1] && data[pixelIndex + 2] === targetColor[2] && data[pixelIndex + 3] === targetColor[3]) {
+                    data[pixelIndex] = newColor[0];
+                    data[pixelIndex + 1] = newColor[1];
+                    data[pixelIndex + 2] = newColor[2];
+                    data[pixelIndex + 3] = newColor[3];
+    
+                    pixelStack.push([x + 1, y]);
+                    pixelStack.push([x - 1, y]);
+                    pixelStack.push([x, y + 1]);
+                    pixelStack.push([x, y - 1]);
+                }
+            }
+    
+            ctx.putImageData(imageData, 0, 0);
         }
     
         document.getElementById('sendImagesBtn').addEventListener('click', () => {
-            // Create a temporary canvas to capture the image without the grid
-            const tempCanvas = document.createElement('canvas');
-            const tempCtx = tempCanvas.getContext('2d');
-            tempCanvas.width = canvas.width;
-            tempCanvas.height = canvas.height;
+            const drawingDataURL = canvas.toDataURL();
+            const imageDataURL = img.src;
             
-            // Draw the current canvas to the temporary canvas
-            tempCtx.drawImage(canvas, 0, 0);
-    
-            const canvasDataUrl = tempCanvas.toDataURL('image/jpeg');
-            const originalImageUrl = img.src;
-    
-            const formData = new FormData();
-            formData.append('canvas_image', dataURLtoBlob(canvasDataUrl), 'drawing.jpg');
-            formData.append('original_image', originalImageUrl);
-    
+            // Replace with your server's URL to handle the image and drawing
             fetch('/upload', {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ drawing: drawingDataURL, image: imageDataURL }),
             })
             .then(response => response.json())
             .then(data => {
-                const confirmationDiv = document.getElementById('confirmation');
-                confirmationDiv.innerHTML = `
-                    ${data.message} <br>
-                    Canvas Image Path: ${data.canvas_image_path} <br>
-                    Original Image URL: ${data.original_image_url}
-                `;
-                confirmationDiv.style.display = 'block';
+                document.getElementById('confirmation').innerText = data.message;
+                document.getElementById('confirmation').style.display = 'block';
             })
             .catch((error) => {
                 console.error('Error:', error);
+                alert('Something went wrong. Please try again.');
             });
         });
-    
-        function dataURLtoBlob(dataURL) {
-            const byteString = atob(dataURL.split(',')[1]);
-            const mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
-            const ab = new ArrayBuffer(byteString.length);
-            const ia = new Uint8Array(ab);
-            for (let i = 0; i < byteString.length; i++) {
-                ia[i] = byteString.charCodeAt(i);
+        
+        function drawGrid() {
+            const gridColor = '#e0e0e0';
+            ctx.beginPath(); // Start a new path for the grid
+            for (let x = 0; x < canvas.width; x += pixelSize) {
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
             }
-            return new Blob([ab], { type: mimeString });
+            for (let y = 0; y < canvas.height; y += pixelSize) {
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+            }
+            ctx.strokeStyle = gridColor;
+            ctx.stroke();
         }
     </script>
-</body>
+    </body>
 </html>
