@@ -71,10 +71,10 @@
         </button>
         <div class="collapse navbar-collapse" id="navbar">
           <div class="navbar-nav">
-            <a class="nav-item nav-link" id="home" href="index.html">Home</a>
-            <a class="nav-item nav-link" id="logout" href="kolo.html">kolo umění</a>
-            <a class="nav-item nav-link" id="login" href="drawing.html">kreslení</a>
-            <a class="nav-item nav-link" id="signUp" href="day.html">umění dne</a>
+<a class="nav-item nav-link" id="home" href="/">Home</a>
+            <a class="nav-item nav-link" id="logout" href="/kolo">kolo umění</a>
+            <a class="nav-item nav-link" id="login" href="/drawing">kreslení</a>
+            <a class="nav-item nav-link" id="signUp" href="/day">umění dne</a>
           </div>
         </div>
       </nav> <!-- Main content -->
@@ -126,19 +126,19 @@
     
     const challenges = {
         'visuální umění': [
-            "Rekonstruj slavný obraz pouze pomocí emotikonů",
-            "Nakresli autoportrét nedominantní rukou.",
-            "Vytvoř koláž představující váš týden pouze pomocí výstřižků z časopisů.",
+        {% for i in visuals %}
+            "{{i}}",
+        {%endfor%}
         ],
         'hudební': [
-            "Slož 30 sekundovou znělku pro tvoji oblíbenou svačinu",
-            "Vytvoř remix zvuku tvého budíku",
-            "Slož básničku o tvém snu",
+        {% for i in visuals %}
+            "{{i}}",
+        {%endfor%}
         ],
         'divadelní': [
-            "Předveď minutový monolog v roli své oblíbené filmové postavy.",
-            "Zahraj scénu ze svého dne, ale ve stylu němého filmu.",
-            "Improvizuj reklamu na směšný produkt",
+        {% for i in theatres %}
+            "{{i}}",
+        {%endfor%}
         ],
         'taneční': [
             {% for i in dances %}

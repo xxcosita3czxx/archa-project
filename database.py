@@ -11,6 +11,15 @@ class dbEdit:
 class dances(db.Model):
     id: Mapped[int] = mapped_column(db.Integer, primary_key=True, autoincrement=True)
     task: Mapped[str] = mapped_column(db.String, nullable=False)
+class theatres(db.Model):
+    id: Mapped[int] = mapped_column(db.Integer, primary_key=True, autoincrement=True)
+    task: Mapped[str] = mapped_column(db.String, nullable=False)
+class Visual(db.Model):
+    id: Mapped[int] = mapped_column(db.Integer, primary_key=True, autoincrement=True)
+    task: Mapped[str] = mapped_column(db.String, nullable=False)
+class musics(db.Model):
+    id: Mapped[int] = mapped_column(db.Integer, primary_key=True, autoincrement=True)
+    task: Mapped[str] = mapped_column(db.String, nullable=False)
 
 class test(db.Model):
     id: Mapped[int] = mapped_column(db.Integer, primary_key=True, autoincrement=True)
