@@ -13,16 +13,10 @@ Builder.load_string("""
         on_press: root.Push()
 """)
 
-class MyWebView(MDScreen):
-    def Push(self):
-        webview.create_window('Hello world', 'https://pywebview.flowrl.com/hello')
-        webview.start()
-
-
 class MyWebApp(MDApp):
     def build(self):
-        return MyWebView()
-
+        webview.create_window('Hello world', 'https://pywebview.flowrl.com/hello')
+        webview.start()
 
 if __name__ == '__main__':
     MyWebApp().run()
