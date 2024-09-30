@@ -12,16 +12,10 @@ app.config.from_object(Config)
 db.init_app(app)
 with app.app_context():
     db.create_all()
-def querydb(table):
-    q = table.query.all()
-    return q
+
 @app.route('/')
 def hello_world():
-    testq=querydb(test)
-    print(f"Query result: {testq}")
-    print(f"Number of results: {len(testq)}")
-    for item in testq:
-        print(f"Item ID: {item.id}, huewhg: {item.huewhg}")
+    testq=test.query.all()
     return render_template("index.html")
 
 # Create a namespace for the API
