@@ -1,4 +1,4 @@
-const artForms = [
+/*const artForms = [
     { name: 'visuální umění', icon: '🎨', color: '#FF9AA2' },
     { name: 'hudební', icon: '🎵', color: '#FFB7B2' },
     { name: 'divadelní', icon: '🎭', color: '#FFDAC1' },
@@ -93,4 +93,4 @@ function spinWheel() {
     challengeText.textContent = `Tvoje ${artForm.name} Challenge:`;
     challenge.textContent = randomChallenge;
     challengeContainer.style.display = 'block';
-}
+}*/
