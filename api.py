@@ -21,6 +21,11 @@ def api(app):
         def get(self):
             return "listing ig...."
 
+    @api.route('/api/accounts/<int:acc_id>/info', methods=['GET'])
+    class AccountIdInfo(Resource):
+        def get(self, acc_id):
+            return f"{acc_id} info"
+
     @api.route("/accounts/delete")
     class AccountDelete(Resource):
         def delete(self):
