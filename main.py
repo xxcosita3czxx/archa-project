@@ -1,4 +1,4 @@
-from flask import Flask, render_template, make_response
+from flask import Flask, render_template, make_response,request,jsonify, send_from_directory, redirect
 from api import api
 import sqlalchemy
 from database import db, test, dances, theatres, Visual, musics
@@ -60,7 +60,15 @@ def day():
     return resp 
 # Create a namespace for the API
 api(app=app)
-
+@app.route('/upload', methods=['POST'])
+def upload():
+    if 'canvas_image' in request.files:
+        canvas_image = request.files['canvas_image']
+        print(canvas_image)
+    if 'original_image' in request.form:
+        original_image_url = request.form['original_image']
+        print(f"Original image URL: {original_image_url}")
+    return redirect("/drawing")
 # API Endpoint
 
 if __name__ == '__main__':
