@@ -16,8 +16,10 @@ def api(app):
         def get(self):
             return {'message': 'Hello, World!'}
 
-    @api.route("/day/today")
-
+    @api.route("/day/info")
+    class DayInfo(Resource):
+        def get(self):
+            pass
     @api.route("/accounts/create")
     class AccountCreate(Resource):
         def post(self):
