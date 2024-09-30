@@ -1,7 +1,7 @@
 from flask import Flask, render_template, make_response, request, jsonify, send_from_directory, redirect
 from api import api
 import sqlalchemy
-from database import db, test, dances, theatres, Visual, musics
+from database import db, test, dances, theatres, Visual, musics, images
 from config import Config
 import os
 import requests
@@ -9,6 +9,7 @@ from PIL import Image, ImageOps
 import numpy as np
 from io import BytesIO
 from skimage.metrics import structural_similarity as ssim
+import random
 #init, do not touch
 app = Flask(__name__,
 template_folder=os.path.abspath(Config.TEMPLATE_FOLDER),
@@ -57,7 +58,16 @@ def drawing():
     return resp 
 @app.route('/day')
 def day():
-    resp = make_response(render_template("day.html"))
+    imgs = images.query.all()
+    imgsl = []
+    for i in imgs:
+        imgsl.append(i.link)
+    img = random.choice(imgsl)
+    context = {
+        "img":img
+    }
+    
+    resp = make_response(render_template("day.html", **context))
     return resp 
 # Create a namespace for the API
 api(app=app)
