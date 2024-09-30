@@ -156,8 +156,8 @@
     
         function loadImage(imageSrc) {
             img.onload = function() {
-                canvas.width = img.width;
-                canvas.height = img.height;
+                canvas.width = img.width/3;
+                canvas.height = img.height/3;
                 drawGrid();
             };
             img.src = imageSrc;
@@ -217,7 +217,7 @@
         }
     
         function drawGrid() {
-            ctx.strokeStyle = '#e0e0e0';
+            ctx.strokeStyle = '#b00b69';
             ctx.lineWidth = 1;
     
             for (let x = 0; x <= canvas.width; x += pixelSize) {
