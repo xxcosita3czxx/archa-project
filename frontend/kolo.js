@@ -1,30 +1,30 @@
 const artForms = [
-    { name: 'Visual Art', icon: '🎨', color: '#FF9AA2' },
-    { name: 'Music', icon: '🎵', color: '#FFB7B2' },
-    { name: 'Theater', icon: '🎭', color: '#FFDAC1' },
-    { name: 'Dance', icon: '💃', color: '#E2F0CB' },
+    { name: 'visuální umění', icon: '🎨', color: '#FF9AA2' },
+    { name: 'hudební', icon: '🎵', color: '#FFB7B2' },
+    { name: 'divadelní', icon: '🎭', color: '#FFDAC1' },
+    { name: 'taneční', icon: '💃', color: '#E2F0CB' },
 ];
 
 const challenges = {
-    'Visual Art': [
-        "Recreate a famous painting using only emojis",
-        "Draw a self-portrait using your non-dominant hand",
-        "Create a collage representing your week using only magazine cutouts",
+    'visuální umění': [
+        "Rekonstruj slavný obraz pouze pomocí emotikonů",
+        "Nakresli autoportrét nedominantní rukou.",
+        "Vytvoř koláž představující váš týden pouze pomocí výstřižků z časopisů.",
     ],
-    'Music': [
-        "Compose a 30-second jingle for your favorite snack",
-        "Create a remix of your alarm sound",
-        "Write lyrics for an existing instrumental track",
+    'hudební': [
+        "Slož 30 sekundovou znělku pro tvoji oblíbenou svačinu",
+        "Vytvoř remix zvuku tvého budíku",
+        "Slož básničku o tvém snu",
     ],
-    'Theater': [
-        "Perform a one-minute monologue as your favorite movie character",
-        "Act out a scene from your day, but in the style of a silent film",
-        "Improvise a commercial for a ridiculous product",
+    'divadelní': [
+        "Předveď minutový monolog v roli své oblíbené filmové postavy.",
+        "Zahraj scénu ze svého dne, ale ve stylu němého filmu.",
+        "Improvizuj reklamu na směšný produkt",
     ],
-    'Dance': [
-        "Choreograph a 15-second dance to your favorite meme song",
-        "Teach a family member or friend a TikTok dance",
-        "Create a dance move inspired by your pet or favorite animal",
+    'taneční': [
+        "Choreografuj 15sekundového tance na oblíbenou meme píseň",
+        "Vytvoř TikTok tanec napsaný nějakým AI",
+        "Vytvoř taneční pohyb inspirovaný vaším domácím mazlíčkem nebo oblíbeným zvířetem.",
     ],
 };
 
@@ -68,23 +68,19 @@ function spinWheel() {
         let selectedArt;
 
         if (finalRotation < 90) {
-            console.log("Méně než 90");
-            selectedArt = artForms.find(art => art.name === 'Music'); // Music
+            selectedArt = artForms.find(art => art.name === 'hudební'); // Music
         } 
         
         if (finalRotation >= 90 && finalRotation < 180) {
-            console.log("Více než 90, ale méně než 180");
-            selectedArt = artForms.find(art => art.name === 'Visual Art'); // Visual Art
+            selectedArt = artForms.find(art => art.name === 'visuální umění'); // Visual Art
         } 
         
         if (finalRotation >= 180 && finalRotation < 270) {
-            console.log("Více než 180, ale méně než 270");
-            selectedArt = artForms.find(art => art.name === 'Dance'); // Theater
+            selectedArt = artForms.find(art => art.name === 'taneční'); // Theater
         } 
         
         if (finalRotation >= 270 && finalRotation < 360) {
-            console.log("Více než 270, ale méně než 360");
-            selectedArt = artForms.find(art => art.name === 'Theater'); // Dance
+            selectedArt = artForms.find(art => art.name === 'divadelní'); // Dance
         }
 
         // Display the selected challenge
@@ -94,7 +90,7 @@ function spinWheel() {
     const artChallenges = challenges[artForm.name];
     const randomChallenge = artChallenges[Math.floor(Math.random() * artChallenges.length)];
     
-    challengeText.textContent = `Your ${artForm.name} Challenge:`;
+    challengeText.textContent = `Tvoje ${artForm.name} Challenge:`;
     challenge.textContent = randomChallenge;
     challengeContainer.style.display = 'block';
 }
