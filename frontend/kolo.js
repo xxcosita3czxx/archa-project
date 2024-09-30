@@ -41,12 +41,13 @@ spinButton.addEventListener('click', spinWheel);
 function spinWheel() {
     if (spinning) return;
     spinning = true;
-    const randomDegree = Math.floor(Math.random() * 360) + 720;
+    const randomDegree = Math.floor(Math.random() * 360) + 720; // At least two full rotations
     wheel.style.transform = `rotate(${randomDegree}deg)`;
     
     setTimeout(() => {
         spinning = false;
-        const selectedIndex = Math.floor(((randomDegree % 360) / 90) % 4);
+        const finalRotation = randomDegree % 360;
+        const selectedIndex = Math.floor(finalRotation / 90);
         const selectedArt = artForms[selectedIndex];
         displayChallenge(selectedArt);
     }, 3000);

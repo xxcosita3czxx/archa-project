@@ -1,5 +1,7 @@
 from flask import Flask, render_template
 from api import api
+import sqlalchemy
+from database import 
 
 app = Flask(__name__, static_folder='./frontend', template_folder='./frontend')
 

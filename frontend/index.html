@@ -7,9 +7,15 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .wheel {
+        .wheel-container {
+            position: relative;
             width: 200px;
             height: 200px;
+            margin: 0 auto;
+        }
+        .wheel {
+            width: 100%;
+            height: 100%;
             position: relative;
             overflow: hidden;
             border-radius: 50%;
@@ -25,19 +31,46 @@
             align-items: center;
             font-size: 24px;
         }
+        .emoticon {
+            display: inline-block;
+            transform-origin: center;
+        }
+        .arrow {
+            position: absolute;
+            top: 43%;
+            right: -30px;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            border-left: 30px solid #333;
+            transform: rotate(180deg);
+        }
     </style>
 </head>
 <body>
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
         <div class="text-center">
-            <div id="wheel" class="wheel mx-auto mb-4">
-                <div class="wheel-section" style="transform: rotate(0deg) skew(45deg); background-color: #FF9AA2;">🎨</div>
-                <div class="wheel-section" style="transform: rotate(90deg) skew(45deg); background-color: #FFB7B2;">🎵</div>
-                <div class="wheel-section" style="transform: rotate(180deg) skew(45deg); background-color: #FFDAC1;">🎭</div>
-                <div class="wheel-section" style="transform: rotate(270deg) skew(45deg); background-color: #E2F0CB;">💃</div>
+            <div class="wheel-container mb-4">
+                <div id="wheel" class="wheel">
+                    <div class="wheel-section" style="transform: rotate(0deg) skew(900deg); background-color: #FF9AA2;">
+                        <span class="emoticon" style="transform: rotate(90deg);">🎨</span>
+                    </div>
+                    <div class="wheel-section" style="transform: rotate(90deg) skew(900deg); background-color: #FFB7B2;">
+                        <span class="emoticon" style="transform: rotate(135deg);">🎵</span>
+                    </div>
+                    <div class="wheel-section" style="transform: rotate(180deg) skew(900deg); background-color: #FFDAC1;">
+                        <span class="emoticon" style="transform: rotate(-225deg);">🎭</span>
+                    </div>
+                    <div class="wheel-section" style="transform: rotate(270deg) skew(900deg); background-color: #E2F0CB;">
+                        <span class="emoticon" style="transform: rotate(135deg);">💃</span>
+                    </div>
+                </div>
+                <div class="arrow"></div>
             </div>
             <button id="spinButton" class="btn btn-success btn-lg mb-4">Spin for Art!</button>
-            <div id="challengeContainer" class="card" style="display: none;">
+                <div id="challengeContainer" class="card" style="display: none;">
                 <div class="card-body">
                     <h5 id="challengeText" class="card-title"></h5>
                     <p id="challenge" class="card-text"></p>
