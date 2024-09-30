@@ -5,11 +5,12 @@ from database import db, test, dances, theatres, Visual, musics
 from config import Config
 import os
 import requests
-from PIL import Image
+from PIL import Image, ImageOps 
 from io import BytesIO
 from werkzeug.datastructures import FileStorage
-
+import numpy as np
 from PIL import Image
+from skimage.metrics import structural_similarity as ssim
 #TODO Neural Network image check
 
 
@@ -84,17 +85,26 @@ def upload():
         original_image_url = request.form['original_image']
         print(f"Original image URL: {original_image_url}")
     print(get_image_from_url(original_image_url))
-    image = Image.open(get_image_from_url(original_image_url)   )
-    image.show()
     background = Image.open(get_image_from_url(original_image_url))
+    background = ImageOps.grayscale(background) 
     overlay = Image.open(canvas_image)
 
     background = background.convert("RGBA")
     overlay = overlay.convert("RGBA")
 
-    new_img = Image.blend(background, overlay, 0.5)
-    image = Image.open(new_img)
-    image.show()
+    overlay = overlay.resize(background.size)
+    img1_np = np.array(overlay)
+    img2_np = np.array(background)
+
+    # Compute the mean squared error (MSE) between the two images
+    mse = np.mean((img1_np - img2_np) ** 2)
+
+    # Calculate maximum possible MSE for normalization (255 is max pixel value for grayscale images)
+    max_mse = 255 ** 2
+
+    # Compute similarity percentage (100% means identical, 0% means fully different)
+    similarity = 100 * (1 - (mse / max_mse))
+    print(similarity)
     return redirect("/drawing")
 # API Endpoint
 
