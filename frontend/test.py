@@ -1,4 +1,4 @@
-"""from flask import Flask, request, jsonify, send_from_directory, redirect
+from flask import Flask, request, jsonify, send_from_directory, redirect
 import os
 
 app = Flask(__name__)
@@ -31,4 +31,3 @@ def upload():
 if __name__ == '__main__':
     os.makedirs('uploads', exist_ok=True)  # Create uploads directory if it doesn't exist
     app.run(debug=True)
-"""
