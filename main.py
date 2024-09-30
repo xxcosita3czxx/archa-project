@@ -1,4 +1,4 @@
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, render_template
 from api import api
 
 app = Flask(__name__, static_folder='frontend')
@@ -6,9 +6,8 @@ app = Flask(__name__, static_folder='frontend')
 
 # Serve frontend files from 'frontend/' directory as root
 @app.route('/')
-@app.route('/<path:path>')
-def serve_frontend(path='index.html'):
-    return send_from_directory(app.static_folder, path)
+def hello_world():
+    return render_template("index.html")
 
 api(app=app)
 
