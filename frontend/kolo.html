@@ -131,21 +131,25 @@
             {% for i in visuals %}
                 "{{i}}",
             {% endfor %}
+            {{ finalvisual | safe }}
         ],
         'hudební': [
-            {% for i in visuals %}
+            {% for i in musics %}
                 "{{i}}",
             {% endfor %}
+            {{ finalmusic | safe }}
         ],
         'divadelní': [
             {% for i in theatres %}
                 "{{i}}",
             {% endfor %}
+            {{ finaltheatre | safe }}
         ],
         'taneční': [
             {% for i in dances %}
                 "{{i}}",
             {% endfor %}
+            {{ finaldance | safe }}
         ],
     };
 
@@ -220,11 +224,14 @@
     function displayChallenge(artForm) {
         const artChallenges = challenges[artForm.name];
         const randomChallenge = artChallenges[Math.floor(Math.random() * artChallenges.length)];
-        
+    
         challengeText.textContent = `Tvoje ${artForm.name} Challenge:`;
-        challenge.textContent = randomChallenge;
+        
+        // Use innerHTML to correctly interpret any HTML content within the challenge
+        challenge.innerHTML = randomChallenge;
+    
         challengeContainer.style.display = 'block';
-
+    
         // Play applause sound effect
         applauseSound.currentTime = 0; // Reset sound to start
         applauseSound.play();
