@@ -12,6 +12,8 @@
         body, html {
             height: 100%;
             margin: 0;
+            background-color: #1f1f1f;
+            color: #ffffff; 
         }
         .navbar {
             margin-bottom: 20px;
@@ -79,7 +81,7 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-color: #1f1f1f">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -152,28 +154,22 @@
     const images = [
         "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/450px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
         "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/800px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg/330px-Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg", 
-        "https://www.1st-art-gallery.com/media/magefan_blog/The-Last-Supper-Restored-Da-Vinci_32x16.jpg", 
-        "https://art-and-see.com/cdn/shop/files/1684px-Vincent_Willem_van_Gogh_138_480x480.jpg?v=1710530207", 
-        "https://upload.wikimedia.org/wikipedia/commons/5/5b/Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg", 
-        "https://art-and-see.com/cdn/shop/files/Vincent_Willem_van_Gogh_128_480x480.jpg?v=1710530431", 
-        "https://art-and-see.com/cdn/shop/files/2722px-Vincent_van_Gogh_-_De_slaapkamer_-_Google_Art_Project_480x480.jpg?v=1710530363", 
-        "https://onlinegallery.art/images/blog/2013-04-Meisje-met-de-parel-600x389.jpg?type=webp&quality=85&background=ffffff7f&force_jpg_crop=1&resolution=600x389", 
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1y5GRM9pJtvgSJ2txDfqEK5VguyGlvr1St6TZcT7DmjvuOKdji-bgXklsOzWDaXy0y6g&usqp=CAU", 
-        "https://hips.hearstapps.com/hmg-prod/images/albert-einstein-sticks-out-his-tongue-when-asked-by-news-photo-1681316749.jpg", 
-        "https://cdn.pixabay.com/photo/2020/01/04/23/37/landscape-4742004_1280.jpg"
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg/330px-Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg",
     ];
 
     // Initialize the last image index
     let lastImageIndex = -1;
 
-    function getRandomImage() {
-        let newImageIndex;
+        // Background music logic
+        let lastTrackIndex = -1;
 
-        // Keep generating a new index until it's different from the last
-        do {
-            newImageIndex = Math.floor(Math.random() * images.length);
-        } while (newImageIndex === lastImageIndex);
+        function playMusic() {
+            let audio = new Audio();
+            function playNextTrack() {
+                let trackIndex;
+                do {
+                    trackIndex = Math.floor(Math.random() * audioTracks.length);
+                } while (trackIndex === lastTrackIndex);
 
         // Update lastImageIndex and return the new image
         lastImageIndex = newImageIndex;

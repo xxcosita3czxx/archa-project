@@ -1,0 +1,13 @@
+[Unit]
+Description=My FastAPI Service
+After=network.target
+
+[Service]
+User=root
+Group=www-data
+WorkingDirectory=/var/www/archa-project
+ExecStart=/bin/python main.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
