@@ -17,15 +17,12 @@ def api(app):
         def get(self):
             return {'message': 'Hello, World!'}
 
-    @api.route("/day/info")
-    class DayInfo(Resource):
-        def get(self):
-            pass #TODO here
 
     @api.route("/accounts/create")
     class AccountCreate(Resource):
         def post(self):
             return "making ig...."
+
     @api.route("/accounts/list")
     class AccountList(Resource):
         def get(self):
