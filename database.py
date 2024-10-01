@@ -20,6 +20,9 @@ class Visual(db.Model):
 class musics(db.Model):
     id: Mapped[int] = mapped_column(db.Integer, primary_key=True, autoincrement=True)
     task: Mapped[str] = mapped_column(db.String, nullable=False)
+class images(db.Model):
+    id: Mapped[int] = mapped_column(db.Integer, primary_key=True, autoincrement=True)
+    link: Mapped[str] = mapped_column(db.String, nullable=False)
 
 class test(db.Model):
     id: Mapped[int] = mapped_column(db.Integer, primary_key=True, autoincrement=True)

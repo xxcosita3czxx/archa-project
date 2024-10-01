@@ -1,35 +1,22 @@
-from flask import Flask, render_template, make_response,request,jsonify, send_from_directory, redirect
+from flask import Flask, render_template, make_response, request, jsonify, send_from_directory, redirect
 from api import api
 import sqlalchemy
-from database import db, test, dances, theatres, Visual, musics
+from database import db, test, dances, theatres, Visual, musics, images
 from config import Config
 import os
 import requests
-from PIL import Image, ImageOps 
-from io import BytesIO
-from werkzeug.datastructures import FileStorage
+from PIL import Image, ImageOps
 import numpy as np
-from PIL import Image
+from io import BytesIO
 from skimage.metrics import structural_similarity as ssim
-#TODO Neural Network image check
-
-
+import random
 #init, do not touch
 app = Flask(__name__,
 template_folder=os.path.abspath(Config.TEMPLATE_FOLDER),
 static_folder=os.path.abspath(Config.STATIC_FOLDER))
 app.config.from_object(Config)
 db.init_app(app)
-def get_image_from_url(image_url):
-    response = requests.get(image_url)
-    if response.status_code == 200:
-    # Create an image object from the downloaded data
-        image = Image.open(BytesIO(response.content))
-        image_buffer = BytesIO()
-        image.save(image_buffer, format='JPEG')
-        image_buffer.seek(0)
-        file_storage = FileStorage(image_buffer, filename="drawing.jpg", content_type="image/jpeg")
-        return file_storage
+
 @app.route('/kolo')
 def kolo():
     dancesl = []
@@ -71,32 +58,53 @@ def drawing():
     return resp 
 @app.route('/day')
 def day():
-    resp = make_response(render_template("day.html"))
+    imgs = images.query.all()
+    imgsl = []
+    for i in imgs:
+        imgsl.append(i.link)
+    img = random.choice(imgsl)
+    context = {
+        "img":img
+    }
+    
+    resp = make_response(render_template("day.html", **context))
     return resp 
 # Create a namespace for the API
 api(app=app)
 @app.route('/upload', methods=['POST'])
 def upload():
-    if 'canvas_image' in request.files:
-        canvas_image = request.files['canvas_image']
-        print(canvas_image)
-        
-    if 'original_image' in request.form:
-        original_image_url = request.form['original_image']
-        print(f"Original image URL: {original_image_url}")
-    print(get_image_from_url(original_image_url))
-    background = Image.open(get_image_from_url(original_image_url))
-    background = ImageOps.grayscale(background) 
-    overlay = Image.open(canvas_image)
+    if 'canvas_image' not in request.files or 'original_image' not in request.form:
+        return jsonify({"error": "Missing required files"}), 400
 
-    background = background.convert("RGBA")
-    overlay = overlay.convert("RGBA")
-
+    canvas_image = Image.open(request.files['canvas_image']).convert('L')  # Convert to grayscale
+    original_image_url = request.form['original_image']
     
-    overlay = overlay.resize((overlay.width // 3, overlay.height // 3), Image.LANCZOS)
-    background = background.resize((background.width // 3, background.height // 3), Image.LANCZOS)
-    background.show()
-    overlay.show()
+    # Download and open the original image
+    response = requests.get(original_image_url)
+    original_image = Image.open(BytesIO(response.content)).convert('L')  # Convert to grayscale
+    
+    # Resize images to match
+    size = (50, 50)  # You can adjust this size as needed
+    canvas_image = canvas_image.resize(size)
+    original_image = original_image.resize(size)
+
+    # Convert images to numpy arrays
+    canvas_array = np.array(canvas_image)
+    original_array = np.array(original_image)
+    canvas_filled_ratio = np.sum(canvas_array < 240) / canvas_array.size
+    if canvas_filled_ratio < 0.05:
+        return jsonify({
+            "similarity": "0.00%",
+            "message": "Your canvas appears to be blank or nearly blank. Try drawing something!"
+        })
+    # Calculate the Mean Squared Error (MSE)
+    similarity, _ = ssim(canvas_array, original_array, full=True)
+    brightness_diff = abs(np.mean(canvas_array) - np.mean(original_array)) / 255
+    adjusted_similarity = similarity * (1 - brightness_diff)
+    
+    # Convert similarity to percentage
+    adjusted_similarity = similarity * 750
+    print(adjusted_similarity)
     return redirect("/drawing")
 # API Endpoint
 

@@ -140,24 +140,29 @@
         const ctx = canvas.getContext('2d');
 
         let currentColor = '#000000';
-        const pixelSize = 10;
-        let bucketMode = false;
-        let isDrawing = false;
-
+        const pixelSize = 5;
+        let bucketMode = false; // Bucket mode initially off
+        let isDrawing = false; // To track if drawing is active
+    
+<<<<<<< HEAD
+        function loadImage(imageSrc) {
+            img.onload = function() {
+                canvas.width = img.width/3;
+                canvas.height = img.height/3;
+                drawGrid();
+            };
+            img.src = imageSrc;
+        }
+=======
+        // Array of image sources
         const images = [
             "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/450px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
             "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/800px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
             "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg/330px-Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg",
             "https://i.ytimg.com/vi/8vMd-jqj9R0/maxresdefault.jpg"
         ];
-
-        const audioTracks = [
-            "piano.mp3",
-            "relaxing-guitar-music.mp3",
-            "relaxing-guitar.mp3",
-            "the-last-piano.mp3"
-        ];
-
+    
+        // Randomly select an image from the array
         const randomImage = images[Math.floor(Math.random() * images.length)];
         img.src = randomImage;
 
@@ -226,11 +231,53 @@
         function draw(e) {
             if (!isDrawing) return;
             const rect = canvas.getBoundingClientRect();
-            const x = Math.floor((e.clientX - rect.left) / pixelSize) * pixelSize;
-            const y = Math.floor((e.clientY - rect.top) / pixelSize) * pixelSize;
-
-            ctx.fillStyle = currentColor;
-            ctx.fillRect(x, y, pixelSize, pixelSize);
+            const x = Math.floor((e.clientX || e.touches[0].clientX - rect.left) / pixelSize) * pixelSize;
+            const y = Math.floor((e.clientY || e.touches[0].clientY - rect.top) / pixelSize) * pixelSize;
+            drawPixel(x, y);
+        }
+        
+        function fillBucket(x, y) {
+            const imgData = ctx.getImageData(x, y, 1, 1);
+            const targetColor = `rgba(${imgData.data[0]}, ${imgData.data[1]}, ${imgData.data[2]}, ${imgData.data[3]})`;
+            const newColor = currentColor;
+        
+            if (targetColor !== newColor) {
+                floodFill(x, y, targetColor, newColor);
+            }
+        }
+    
+        function floodFill(x, y, targetColor, newColor) {
+            const pixelStack = [[x, y]];
+            const width = canvas.width;
+            const height = canvas.height;
+            const imageData = ctx.getImageData(0, 0, width, height);
+            const data = imageData.data;
+    
+            function getPixelIndex(x, y) {
+                return (y * width + x) * 4;
+            }
+        
+            while (pixelStack.length) {
+                const newPos = pixelStack.pop();
+                const x = newPos[0];
+                const y = newPos[1];
+                const pixelIndex = getPixelIndex(x, y);
+    
+                if (x < 0 || x >= width || y < 0 || y >= height) continue;
+                if (data[pixelIndex] === targetColor[0] && data[pixelIndex + 1] === targetColor[1] && data[pixelIndex + 2] === targetColor[2] && data[pixelIndex + 3] === targetColor[3]) {
+                    data[pixelIndex] = newColor[0];
+                    data[pixelIndex + 1] = newColor[1];
+                    data[pixelIndex + 2] = newColor[2];
+                    data[pixelIndex + 3] = newColor[3];
+    
+                    pixelStack.push([x + 1, y]);
+                    pixelStack.push([x - 1, y]);
+                    pixelStack.push([x, y + 1]);
+                    pixelStack.push([x, y - 1]);
+                }
+            }
+    
+            ctx.putImageData(imageData, 0, 0);
         }
 
         function stopDrawing() {
