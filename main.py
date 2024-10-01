@@ -196,11 +196,21 @@ def upload():
 @click.option("--debug",is_flag=True)
 @click.option("--port")
 @click.option("--ip")
-def main(debug,port=5000,ip="127.0.0.1"):
+@click.option("--cert")
+@click.option("--key")
+def main(debug,cert,key,port=5000,ip="127.0.0.1"):
     if debug:
-        app.run(debug=True,port=port,host=ip)
+        if cert and key:
+            context = (cert, key)
+            app.run(debug=True,port=port,host=ip,ssl_context=context)
+        else:
+            app.run(debug=True,port=port,host=ip)
     else:
-        app.run(port=port,host=ip)
+        if cert and key:
+            context = (cert, key)
+            app.run(port=port,host=ip,ssl_context=context)
+        else:
+            app.run(port=port,host=ip)
 
 if __name__ == '__main__':
     main()
