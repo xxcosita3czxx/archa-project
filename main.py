@@ -195,11 +195,12 @@ def upload():
 @click.command()
 @click.option("--debug",is_flag=True)
 @click.option("--port")
-def main(debug,port=5000):
+@click.option("--ip")
+def main(debug,port=5000,ip="127.0.0.1"):
     if debug:
-        app.run(debug=True,port=port)
+        app.run(debug=True,port=port,host=ip)
     else:
-        app.run(port=port)
+        app.run(port=port,host=ip)
 
 if __name__ == '__main__':
     main()
