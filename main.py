@@ -21,24 +21,65 @@ db.init_app(app)
 def kolo():
     dancesl = []
     dancesq = dances.query.all()
+    finaldance = ""
     for i in dancesq:
-        print(i.task)
-        dancesl.append(i.task)
+        if "linktarger=" in i.task:
+            cont = i.task
+            cont = cont.split("linktarger=")
+            print(cont)
+            link="<a href = \\\""+ cont[1] + "\\\">(click)" + "</a>"
+            finaldancetemp = cont[0] + link
+            finaldance += "\""+finaldancetemp+"\",\n"
+            print(link)
+            print(finaldance)
+        else:
+            dancesl.append(i.task)
     theatresl = []
     theatresq = theatres.query.all()
+    finaltheatre = ""
     for i in theatresq:
-        print(i.task)
-        theatresl.append(i.task)
+        if "linktarger=" in i.task:
+            cont = i.task
+            cont = cont.split("linktarger=")
+            print(cont)
+            link="<a href = \\\""+ cont[1] + "\\\">(click)" + "</a>"
+            finaltheatretemp = cont[0] + link
+            finaltheatre += "\""+finaltheatretemp+"\",\n"
+            print(link)
+            print(finaltheatre)
+        else:
+            theatresl.append(i.task)
     visualsl = []
     visualsq = Visual.query.all()
+    finalvisual = ""
     for i in visualsq:
-        print(i.task)
-        visualsl.append(i.task)
+        if "linktarger=" in i.task:
+            cont = i.task
+            cont = cont.split("linktarger=")
+            print(cont)
+            link="<a href = \\\""+ cont[1] + "\\\">(click)" + "</a>"
+            finalvisualtemp = cont[0] + link
+            finalvisual += "\""+finalvisualtemp+"\",\n"
+            print(link)
+            print(finalvisual)
+        else:    
+            pass
+            visualsl.append(i.task)
     musicsl = []
     musicsq = musics.query.all()
+    finalmusic = ""
     for i in musicsq:
-        print(i.task)
-        musicsl.append(i.task)
+        if "linktarger=" in i.task:
+            cont = i.task
+            cont = cont.split("linktarger=")
+            print(cont)
+            link="<a href = \\\""+ cont[1] + "\\\">(click)" + "</a>"
+            finalmusictemp = cont[0] + link
+            finalmusic += "\""+finalmusictemp+"\",\n"
+            print(link)
+            print(finalmusic)
+        else:
+            musicsl.append(i.task)
     context = {
         "dances":dancesl,
         "theatres": theatresl,
@@ -46,7 +87,7 @@ def kolo():
         "musics": musicsl,
     }
     
-    resp = make_response(render_template("kolo.html", **context))
+    resp = make_response(render_template("kolo.html",finalvisual = finalvisual, finalmusic = finalmusic, finaldance = finaldance, finaltheatre = finaltheatre , **context))
     return resp 
 @app.route('/')
 def index():
@@ -147,5 +188,9 @@ def upload():
         "similarity": f"{adjusted_similarity_percentage:.2f}%",  # Format similarity to 2 decimal places
         "message": "Images processed successfully."
     })
-if __name__ == '__main__':
+
+def main():
     app.run(debug=True)
+
+if __name__ == '__main__':
+    main()
