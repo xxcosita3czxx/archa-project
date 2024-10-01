@@ -49,7 +49,6 @@
             max-width: 1200px;
         }
         .img-canvas-container {
-            display: flex;
             justify-content: center;
             width: 100%;
         }
@@ -92,6 +91,9 @@
                 z-index: 1000;
             }
         }
+        .result-container{
+            /*transform: translateY(0%);*/
+        }
     </style>
 </head>
 <body>
@@ -130,7 +132,10 @@
                 <div class="img-container">
                     <img id="image" class="img-fluid" style="filter: grayscale(100%);" alt="Image">
                 </div>
-
+            
+                <!-- Mezera mezi obrázkem a plátnem -->
+                <div id="editable-space" style="height: 10px;"> </div> <!-- Tuto hodnotu výšky lze editovat -->
+            
                 <!-- Right side: Canvas -->
                 <div class="canvas-container">
                     <canvas id="canvas"></canvas>
@@ -146,7 +151,7 @@
         </div>
     </div>
 
-    <div class="result-container text-center mt-4">
+    <div class="result-container text-center ">
         <h4>Result:</h4>
         <div id="result" class="alert alert-info" role="alert" style="display: none;"></div>
     </div>    
