@@ -218,10 +218,11 @@ def upload():
     adjusted_similarity = similarity * (1 - brightness_diff)
     
     # Convert similarity to percentage
-    adjusted_similarity_percentage = adjusted_similarity * 250  # To convert to percentage
-
+    adjusted_similarity_percentage = adjusted_similarity * 250
+    if adjusted_similarity_percentage >= 101:
+        adjusted_similarity_percentage = 101
     return jsonify({
-        "similarity": f"{adjusted_similarity_percentage:.2f}%",  # Format similarity to 2 decimal places
+        "similarity": f"{adjusted_similarity_percentage:.2f}%",  
         "message": "Images processed successfully."
     })
 
