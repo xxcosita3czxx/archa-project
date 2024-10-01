@@ -13,10 +13,6 @@
             margin-bottom: 20px; /* Space between the title and the wheel */
         }
 
-        .mainText {
-            top: 85%;
-        }
-
         .wheel-container {
             position: relative;
             width: 200px;
@@ -61,27 +57,21 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbar"
-        >
-          <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
+            <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbar">
-          <div class="navbar-nav">
-<a class="nav-item nav-link" id="home" href="/">Home</a>
-            <a class="nav-item nav-link" id="logout" href="/kolo">kolo umění</a>
-            <a class="nav-item nav-link" id="login" href="/drawing">kreslení</a>
-            <a class="nav-item nav-link" id="signUp" href="/day">umění dne</a>
-          </div>
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" id="home" href="/">Home</a>
+                <a class="nav-item nav-link" id="logout" href="/kolo">kolo umění</a>
+                <a class="nav-item nav-link" id="login" href="/drawing">kreslení</a>
+                <a class="nav-item nav-link" id="signUp" href="/day">umění dne</a>
+            </div>
         </div>
-      </nav> <!-- Main content -->
+    </nav>
 
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
         <div class="text-center">
-            <!-- Moved the title inside the main container -->
             <h1>Kolo uměleckých úkolů</h1>
             <div class="wheel-container mb-4">
                 <div id="wheel" class="wheel">
@@ -101,7 +91,7 @@
                 <div class="arrow"></div>
             </div>
             <button id="spinButton" class="btn btn-success btn-lg mb-4">Zatoč pro úkol!</button>
-                <div id="challengeContainer" class="card" style="display: none;">
+            <div id="challengeContainer" class="card" style="display: none;">
                 <div class="card-body">
                     <h5 id="challengeText" class="card-title"></h5>
                     <p id="challenge" class="card-text"></p>
@@ -109,13 +99,25 @@
             </div>
         </div>
     </div>
-    
+
+    <!-- Audio elements for sound effects -->
+    <audio id="wheelSound">
+        <source src="wheel.mp3" type="audio/mpeg">
+    </audio>
+
+    <audio id="applauseSound">
+        <source src="applaus.mp3" type="audio/mpeg">
+    </audio>
+
+    <audio id="buttonSound">
+        <source src="click-button.mp3" type="audio/mpeg">
+    </audio>
+
     <!-- Bootstrap JS and Popper.js -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     
-    <!--<script src="kolo.js"></script>-->
     <script>
     const artForms = [
         { name: 'visuální umění', icon: '🎨', color: '#FF9AA2' },
@@ -123,46 +125,58 @@
         { name: 'divadelní', icon: '🎭', color: '#FFDAC1' },
         { name: 'taneční', icon: '💃', color: '#E2F0CB' },
     ];
-    
+
     const challenges = {
         'visuální umění': [
-        {% for i in visuals %}
-            "{{i}}",
-        {%endfor%}
+            {% for i in visuals %}
+                "{{i}}",
+            {% endfor %}
         ],
         'hudební': [
-        {% for i in visuals %}
-            "{{i}}",
-        {%endfor%}
+            {% for i in visuals %}
+                "{{i}}",
+            {% endfor %}
         ],
         'divadelní': [
-        {% for i in theatres %}
-            "{{i}}",
-        {%endfor%}
+            {% for i in theatres %}
+                "{{i}}",
+            {% endfor %}
         ],
         'taneční': [
             {% for i in dances %}
                 "{{i}}",
-            {%endfor%}
+            {% endfor %}
         ],
     };
-    
+
     const wheel = document.getElementById('wheel');
     const spinButton = document.getElementById('spinButton');
     const challengeContainer = document.getElementById('challengeContainer');
     const challengeText = document.getElementById('challengeText');
     const challenge = document.getElementById('challenge');
-    
+
+    const wheelSound = document.getElementById('wheelSound');
+    const applauseSound = document.getElementById('applauseSound');
+    const buttonSound = document.getElementById('buttonSound'); // Button sound element
+
     let spinning = false;
-    
-    spinButton.addEventListener('click', spinWheel);
-    
+
+    spinButton.addEventListener('click', () => {
+        buttonSound.currentTime = 0; // Reset sound to start
+        buttonSound.play(); // Play button sound
+        spinWheel(); // Call spinWheel function
+    });
+
     let currentRotation = 0;  // Keep track of the current rotation
-    
+
     function spinWheel() {
         if (spinning) return;
         spinning = true;
-    
+
+        // Play the wheel sound effect
+        wheelSound.currentTime = 0; // Reset sound to start
+        wheelSound.play();
+
         // Generate a random degree between 720 and 1080 (2-3 full rotations)
         const randomDegree = Math.floor(Math.random() * 360) + 720;
         
@@ -171,47 +185,49 @@
         
         // Apply the rotation to the wheel
         wheel.style.transform = `rotate(${currentRotation}deg)`;
-    
+
         setTimeout(() => {
             spinning = false;
-    
+
+            // Stop the wheel sound effect when the spinning is done
+            wheelSound.pause(); // Pause the wheel sound
+            wheelSound.currentTime = 0; // Reset to the beginning
+
             // Calculate the final rotation within the 360-degree range
             let finalRotation = currentRotation % 360;
-    
-    
-            while (finalRotation > 360) {
-                finalRotation -= 360;
-            }
-    
+
             // Check the final angle with multiple if conditions
             let selectedArt;
-    
+
             if (finalRotation < 90) {
                 selectedArt = artForms.find(art => art.name === 'hudební'); // Music
             } 
-            
-            if (finalRotation >= 90 && finalRotation < 180) {
+            else if (finalRotation >= 90 && finalRotation < 180) {
                 selectedArt = artForms.find(art => art.name === 'visuální umění'); // Visual Art
             } 
-            
-            if (finalRotation >= 180 && finalRotation < 270) {
+            else if (finalRotation >= 180 && finalRotation < 270) {
                 selectedArt = artForms.find(art => art.name === 'taneční'); // Theater
             } 
-            
-            if (finalRotation >= 270 && finalRotation < 360) {
+            else if (finalRotation >= 270 && finalRotation < 360) {
                 selectedArt = artForms.find(art => art.name === 'divadelní'); // Dance
             }
-    
+
             // Display the selected challenge
             displayChallenge(selectedArt);
         }, 3000);  // Duration of the spin
-    }function displayChallenge(artForm) {
+    }
+
+    function displayChallenge(artForm) {
         const artChallenges = challenges[artForm.name];
         const randomChallenge = artChallenges[Math.floor(Math.random() * artChallenges.length)];
         
         challengeText.textContent = `Tvoje ${artForm.name} Challenge:`;
         challenge.textContent = randomChallenge;
         challengeContainer.style.display = 'block';
+
+        // Play applause sound effect
+        applauseSound.currentTime = 0; // Reset sound to start
+        applauseSound.play();
     }
     </script>
 </body>
