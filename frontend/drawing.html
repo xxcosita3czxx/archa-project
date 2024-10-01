@@ -88,10 +88,11 @@
             </button>
             <div class="collapse navbar-collapse" id="navbar">
                 <div class="navbar-nav">
-                    <a class="nav-item nav-link" id="home" href="/">Home</a>
-                    <a class="nav-item nav-link" id="logout" href="/kolo">kolo umění</a>
-                    <a class="nav-item nav-link" id="login" href="/drawing">kreslení</a>
-                    <a class="nav-item nav-link" id="signUp" href="/day">umění dne</a>
+                    <a class="nav-item nav-link" href="/">Home</a>
+                    <a class="nav-item nav-link" href="/kolo">kolo umění</a>
+                    <a class="nav-item nav-link" href="/drawing">kreslení</a>
+                    <a class="nav-item nav-link" href="/day">umění dne</a>
+                    <a class="nav-item nav-link" href="/mapa">mapa</a>
                 </div>
             </div>
         </div>
@@ -149,28 +150,28 @@
         const pixelSize = 10;  // Size of each pixel
         let bucketMode = false; // Bucket mode initially off
         let isDrawing = false; // To track if drawing is active
+
+// Randomly select an image from the array
+function getRandomImage() {
+    const images = [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/450px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/800px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg/330px-Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg",
+        "https://www.1st-art-gallery.com/media/magefan_blog/The-Last-Supper-Restored-Da-Vinci_32x16.jpg", 
+        "https://art-and-see.com/cdn/shop/files/1684px-Vincent_Willem_van_Gogh_138_480x480.jpg?v=1710530207",
+        "https://upload.wikimedia.org/wikipedia/commons/5/56/The_Great_Wave_off_Kanagawa.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/3/31/PicassoGuernica.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/0/00/Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/7/77/Frida_Kahlo_%28self-portrait%29.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/a/a4/Michelangelo%27s_David.jpg"
+    ];
     
-<<<<<<< HEAD
-        function loadImage(imageSrc) {
-            img.onload = function() {
-                canvas.width = img.width/3;
-                canvas.height = img.height/3;
-                drawGrid();
-            };
-            img.src = imageSrc;
-        }
-=======
-        // Array of image sources
-        const images = [
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/450px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/800px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg/330px-Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg",
-            "https://i.ytimg.com/vi/8vMd-jqj9R0/maxresdefault.jpg"
-        ];
+    // Generate a random index for the image array
+    const newImageIndex = Math.floor(Math.random() * images.length);
     
-        // Randomly select an image from the array
-        const randomImage = images[Math.floor(Math.random() * images.length)];
-        img.src = randomImage;
+    return images[newImageIndex]; // Return the selected image URL
+}    
+    let lastImageIndex = -1;
 
         // Background music logic
         let lastTrackIndex = -1;
@@ -182,7 +183,7 @@
                 do {
                     trackIndex = Math.floor(Math.random() * audioTracks.length);
                 } while (trackIndex === lastTrackIndex);
-
+            }
         // Update lastImageIndex and return the new image
         lastImageIndex = newImageIndex;
         return images[newImageIndex];

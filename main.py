@@ -12,6 +12,8 @@ import numpy as np
 from io import BytesIO
 from skimage.metrics import structural_similarity as ssim
 import random
+import click
+
 from datetime import datetime, timedelta
 #init, do not touch
 app = Flask(__name__,
@@ -202,5 +204,27 @@ def upload():
         "similarity": f"{adjusted_similarity_percentage:.2f}%",  # Format similarity to 2 decimal places
         "message": "Images processed successfully."
     })
+
+
+@click.command()
+@click.option("--debug",is_flag=True)
+@click.option("--port")
+@click.option("--ip")
+@click.option("--cert")
+@click.option("--key")
+def main(debug,cert,key,port=5000,ip="127.0.0.1"):
+    if debug:
+        if cert and key:
+            context = (cert, key)
+            app.run(debug=True,port=port,host=ip,ssl_context=context)
+        else:
+            app.run(debug=True,port=port,host=ip)
+    else:
+        if cert and key:
+            context = (cert, key)
+            app.run(port=port,host=ip,ssl_context=context)
+        else:
+            app.run(port=port,host=ip)
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    main()
