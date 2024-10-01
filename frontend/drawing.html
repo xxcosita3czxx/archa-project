@@ -149,28 +149,17 @@
         const pixelSize = 10;  // Size of each pixel
         let bucketMode = false; // Bucket mode initially off
         let isDrawing = false; // To track if drawing is active
-    
-<<<<<<< HEAD
-        function loadImage(imageSrc) {
-            img.onload = function() {
-                canvas.width = img.width/3;
-                canvas.height = img.height/3;
-                drawGrid();
-            };
-            img.src = imageSrc;
-        }
-=======
-        // Array of image sources
-        const images = [
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/450px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/800px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg/330px-Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg",
-            "https://i.ytimg.com/vi/8vMd-jqj9R0/maxresdefault.jpg"
-        ];
-    
-        // Randomly select an image from the array
-        const randomImage = images[Math.floor(Math.random() * images.length)];
-        img.src = randomImage;
+
+    // Randomly select an image from the array
+    const images = [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/450px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/800px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg/330px-Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg",
+        "https://www.1st-art-gallery.com/media/magefan_blog/The-Last-Supper-Restored-Da-Vinci_32x16.jpg"
+    ];
+
+    // Initialize the last image index
+    let lastImageIndex = -1;
 
         // Background music logic
         let lastTrackIndex = -1;
