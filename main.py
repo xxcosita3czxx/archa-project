@@ -1,4 +1,6 @@
 from flask import Flask, render_template, make_response, request, jsonify, send_from_directory, redirect
+from random_word import RandomWords
+import random
 from api import api
 import sqlalchemy
 from database import db, test, dances, theatres, Visual, musics, images
@@ -12,6 +14,7 @@ from skimage.metrics import structural_similarity as ssim
 import random
 import click
 
+from datetime import datetime, timedelta
 #init, do not touch
 app = Flask(__name__,
 template_folder=os.path.abspath(Config.TEMPLATE_FOLDER),
@@ -19,6 +22,7 @@ static_folder=os.path.abspath(Config.STATIC_FOLDER))
 app.config.from_object(Config)
 db.init_app(app)
 
+    
 @app.route('/kolo')
 def kolo():
     dancesl = []
@@ -101,13 +105,35 @@ def drawing():
     return resp 
 @app.route('/day')
 def day():
-    imgs = images.query.all()
-    imgsl = []
-    for i in imgs:
-        imgsl.append(i.link)
-    img = random.choice(imgsl)
+    current = images.query.first()
+    nowtime = datetime.now()
+    if not current:
+        
+        nowtime = nowtime.replace(hour=23, minute=59, second=59, microsecond=0)
+        prompt = ""
+        r = RandomWords()
+        for i in range(random.randrange(1,5)):
+            prompt += r.get_random_word() + "_"
+        images(
+            enddate=nowtime,
+            prompt = prompt
+        )
+    else:
+        endtime = endtime = datetime.strptime(current.enddate, "%Y-%m-%d %H:%M:%S.%f")
+        if endtime < nowtime:
+            nowtime = nowtime.replace(hour=23, minute=59, second=59, microsecond=0)
+            prompt = "" 
+            r = RandomWords()
+            for i in range(random.randrange(1,5)):
+                prompt += r.get_random_word() + "_"
+            images(
+                enddate=nowtime,
+                prompt = prompt
+            )
+    db.session.commit()
+    
     context = {
-        "img":img
+        "dayprompt":prompt
     }
     
     resp = make_response(render_template("day.html", **context))
