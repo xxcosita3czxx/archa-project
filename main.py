@@ -2,7 +2,7 @@ from flask import Flask, render_template, make_response, request, jsonify, send_
 from random_word import RandomWords
 import random
 from api import api
-import sqlalchemy
+from sqlalchemy import delete
 from database import db, test, dances, theatres, Visual, musics, images
 from config import Config
 import os
@@ -108,30 +108,38 @@ def day():
     current = images.query.first()
     nowtime = datetime.now()
     if not current:
-        
+        print("not current")
         nowtime = nowtime.replace(hour=23, minute=59, second=59, microsecond=0)
         prompt = ""
         r = RandomWords()
         for i in range(random.randrange(1,5)):
             prompt += r.get_random_word() + "_"
-        images(
+        delete_stmt = delete(images).where(images.id == 1)
+        db.session.execute(delete_stmt)
+        newprompt = images(
             enddate=nowtime,
             prompt = prompt
         )
+        db.session.add(newprompt)
     else:
-        endtime = endtime = datetime.strptime(current.enddate, "%Y-%m-%d %H:%M:%S.%f")
+        endtime = endtime = datetime.strptime(current.enddate, "%Y-%m-%d %H:%M:%S")
         if endtime < nowtime:
+            print("the end is nigh")
             nowtime = nowtime.replace(hour=23, minute=59, second=59, microsecond=0)
             prompt = "" 
             r = RandomWords()
             for i in range(random.randrange(1,5)):
                 prompt += r.get_random_word() + "_"
-            images(
+            delete_stmt = delete(images).where(images.id == 1)
+            db.session.execute(delete_stmt)
+            newprompt = images(
                 enddate=nowtime,
                 prompt = prompt
             )
+            db.session.add(newprompt)
     db.session.commit()
-    
+    current = images.query.first()
+    prompt = current.prompt
     context = {
         "dayprompt":prompt
     }
