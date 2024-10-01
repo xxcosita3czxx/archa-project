@@ -10,6 +10,8 @@ import numpy as np
 from io import BytesIO
 from skimage.metrics import structural_similarity as ssim
 import random
+import click
+
 #init, do not touch
 app = Flask(__name__,
 template_folder=os.path.abspath(Config.TEMPLATE_FOLDER),
@@ -189,8 +191,16 @@ def upload():
         "message": "Images processed successfully."
     })
 
-def main():
-    app.run(debug=True)
+
+@click.command()
+@click.option("--debug",is_flag=True)
+@click.option("--port")
+@click.option("--ip")
+def main(debug,port=5000,ip="127.0.0.1"):
+    if debug:
+        app.run(debug=True,port=port,host=ip)
+    else:
+        app.run(port=port,host=ip)
 
 if __name__ == '__main__':
     main()
