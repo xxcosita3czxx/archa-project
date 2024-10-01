@@ -16,7 +16,23 @@
             color: #ffffff; 
         }
         .navbar {
-            margin-bottom: 20px;
+            background-color: #ff3c00;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding: 5px;
+            z-index: 1000;
+        }
+        .nav-link {
+            color: white !important;
+            font-size: 0.8rem;
+            padding: 0.25rem !important;
+            text-align: center;
+        }
+        .navbar-brand {
+            position: absolute;
+            right: 0px;
+            top: -2350%;
         }
         .main-container {
             display: flex;
@@ -32,7 +48,6 @@
             max-width: 1200px;
         }
         .img-canvas-container {
-            display: flex;
             justify-content: center;
             width: 100%;
         }
@@ -65,36 +80,35 @@
         }
         
         /* Media Query for smaller screens */
-        @media (max-width: 768px) {
-            .img-canvas-container {
-                flex-direction: column;
+        @media (max-width: 991px) {
+            .navbar-collapse {
+                position: absolute;
+                top: 100%;
+                right: 0;
+                padding: 1rem;
+                background-color: #1f1f1f;
+                z-index: 1000;
             }
-            .img-container, .canvas-container {
-                width: 100%;
-                margin: 0;
-            }
-            .img-container {
-                margin-bottom: 10px;
-            }
+        }
+        .result-container{
+            /*transform: translateY(0%);*/
         }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-color: #1f1f1f">
-        <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbar">
-                <div class="navbar-nav">
-                    <a class="nav-item nav-link" href="/">Home</a>
-                    <a class="nav-item nav-link" href="/kolo">kolo umění</a>
-                    <a class="nav-item nav-link" href="/drawing">kreslení</a>
-                    <a class="nav-item nav-link" href="/day">umění dne</a>
-                    <a class="nav-item nav-link" href="/mapa">mapa</a>
-                </div>
-            </div>
+    <nav class="navbar navbar-dark">
+        <div class="container-fluid p-0">
+            <ul class="navbar-nav d-flex flex-row justify-content-between w-100">
+                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/kolo">Kolo&nbsp;štěstí</a></li>
+                <li class="nav-item"><a class="nav-link" href="/drawing">Kreslení</a></li>
+                <li class="nav-item"><a class="nav-link" href="/day">Umění&nbsp;dne</a></li>
+                <li class="nav-item"><a class="nav-link" href="https://www.google.com/maps/place/ARCHA/@50.0895018,14.4340919,17z/" target="_blank">Mapa</a></li>
+            </ul>
+            <a class="navbar-brand" href="https://archa-plus.cz/cz/" target="_blank">
+                <img src="https://cdn.discordapp.com/attachments/1288179213492424798/1290514725268099072/ARCHAlogo_negativ.png?ex=66fcbcff&is=66fb6b7f&hm=431906f2faf662dd1a9f9820873a617488b585bd1d80315df4fab65863526cb0&" alt="ARCHA logo" style="height: 60px;">
+            </a>
         </div>
     </nav>
 
@@ -108,8 +122,7 @@
                 <div class="color" style="background-color: #C0C0C0;" data-color="#C0C0C0"></div>
                 <div class="color" style="background-color: #FFFFFF;" data-color="#FFFFFF"></div>
                 <div id="fillBucketContainer" class="d-flex align-items-center ms-1" style="cursor: pointer;">
-                    <div id="bucketStatus" style="width: 30px; height: 30px; background-color: green; border: 1px solid black;"></div>
-                </div>
+                    <div id="bucketStatus" style="width: 30px; height: 30px; background-color: green; border: 1px solid black; text-align: center; line-height: 30px;">🪣</div>                </div>
             </div>
             <!-- Main content -->
             <div class="img-canvas-container">
@@ -117,7 +130,10 @@
                 <div class="img-container">
                     <img id="image" class="img-fluid" style="filter: grayscale(100%);" alt="Image">
                 </div>
-
+            
+                <!-- Mezera mezi obrázkem a plátnem -->
+                <div id="editable-space" style="height: 10px;"> </div> <!-- Tuto hodnotu výšky lze editovat -->
+            
                 <!-- Right side: Canvas -->
                 <div class="canvas-container">
                     <canvas id="canvas"></canvas>
@@ -133,10 +149,14 @@
         </div>
     </div>
 
-    <div class="result-container text-center mt-4">
+    <div class="result-container text-center ">
         <h4>Result:</h4>
         <div id="result" class="alert alert-info" role="alert" style="display: none;"></div>
     </div>    
+    <div class="text-center d-flex justify-content-center">
+        <button id="nextImageBtn" class="btn btn-success mt-3" style="display: none;">Next Image</button>
+    </div>
+    <br><h1></h1></br>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -170,7 +190,9 @@ function getRandomImage() {
         "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Jan_Vermeer_-_The_Art_of_Painting_-_Google_Art_Project.jpg/1200px-Jan_Vermeer_-_The_Art_of_Painting_-_Google_Art_Project.jpg", 
         "https://static.wixstatic.com/media/0c2f7b_b100a25574a74a75be19c15b28281046~mv2_d_1946_1392_s_2.jpg/v1/fill/w_568,h_406,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/0c2f7b_b100a25574a74a75be19c15b28281046~mv2_d_1946_1392_s_2.jpg", 
         "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Johannes_Vermeer_-_Het_melkmeisje_-_Google_Art_Project.jpg/258px-Johannes_Vermeer_-_Het_melkmeisje_-_Google_Art_Project.jpg", 
-        "https://www.buchheimmuseum.de/img/2010/Boot_06_310.jpg?m=1355391887&"
+        "https://www.buchheimmuseum.de/img/2010/Boot_06_310.jpg?m=1355391887&", 
+        "https://lh3.googleusercontent.com/proxy/N5bumA7zsdZriXn_IVUzYIrdsNUQCaqlsyaIac1WdZWb7lLBodScXGUm1oYVonGZLIUwOC1NUXgx1hQKu2EUpyFS", 
+        "https://media.istockphoto.com/id/185267955/vector/traditional-kuniyoshi-japanese-woodblock-print-of-actor.jpg?s=612x612&w=0&k=20&c=JZNNp-Edi7z5y0hQ0-CZyLMw_Oyk-BTPP6C0z5dlSro="
 
     ];
     
@@ -346,58 +368,70 @@ function getRandomImage() {
             } : null;
         }
 
-// Send images to backend
+// Fetch success handling
 document.getElementById('sendImagesBtn').addEventListener('click', () => {
     const drawingData = canvas.toDataURL('image/png');
     const imageData = img.src;
 
-    // Create a new FormData object
     const formData = new FormData();
-    // Convert the drawing data URL to a Blob
     const byteString = atob(drawingData.split(',')[1]);
     const mimeString = drawingData.split(',')[0].split(':')[1].split(';')[0];
     const ab = new ArrayBuffer(byteString.length);
     const ia = new Uint8Array(ab);
-    
     for (let i = 0; i < byteString.length; i++) {
         ia[i] = byteString.charCodeAt(i);
     }
 
     const blob = new Blob([ab], { type: mimeString });
-    formData.append('canvas_image', blob, 'drawing.png'); // Append the canvas image as a file
-    formData.append('original_image', imageData); // Append the original image URL
+    formData.append('canvas_image', blob, 'drawing.png'); 
+    formData.append('original_image', imageData); 
 
-    // Use fetch to send the form data to the backend
     fetch('/upload', {
         method: 'POST',
         body: formData
     })
     .then(response => {
-        // Check if the response is okay
         if (!response.ok) {
             console.error('Error:', response.statusText);
             throw new Error('Network response was not ok');
         }
-        return response.json(); // Parse the response as JSON
+        return response.json();
     })
     .then(data => {
-        // Handle the response data
-        console.log('Server response:', data);
-
-        // Display the similarity and message
         const resultElement = document.getElementById('result');
-        resultElement.textContent = `${data.similarity} - ${data.message}`; // Update with similarity and message
-        resultElement.style.display = 'block'; // Show the result
+        resultElement.textContent = `${data.similarity} - ${data.message}`;
+        resultElement.style.display = 'block';
+
+        // Show the "Next Image" button
+        document.getElementById('nextImageBtn').style.display = 'block';
     })
     .catch(error => {
         console.error('Fetch error:', error);
         document.getElementById('confirmation').textContent = 'Error sending images. Please try again.';
     })
     .finally(() => {
-        // Always show the confirmation message
         document.getElementById('confirmation').textContent = 'Images sent successfully!';
         document.getElementById('confirmation').style.display = 'block';
     });
+});
+
+// Handle "Next Image" button click
+document.getElementById('nextImageBtn').addEventListener('click', () => {
+    // Reset result and hide button
+    document.getElementById('result').style.display = 'none';
+    document.getElementById('nextImageBtn').style.display = 'none';
+
+    // Set a new random image
+    img.src = getRandomImage();
+
+    // Clear the canvas for the new drawing
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = 'white'; 
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    drawGrid();
+
+    // Reset confirmation message
+    document.getElementById('confirmation').style.display = 'none';
 });
 </script>
 </body>

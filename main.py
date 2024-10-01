@@ -1,24 +1,27 @@
-from flask import Flask, render_template, make_response, request, jsonify, send_from_directory, redirect
+from flask import Flask, render_template, make_response, request, jsonify
 from random_word import RandomWords
 import random
 from api import api
 from sqlalchemy import delete
-from database import db, test, dances, theatres, Visual, musics, images
+from database import db, dances, theatres, Visual, musics, images
 from config import Config
 import os
 import requests
-from PIL import Image, ImageOps
+from PIL import Image
 import numpy as np
 from io import BytesIO
 from skimage.metrics import structural_similarity as ssim
-import random
 import click
+from datetime import datetime
 
-from datetime import datetime, timedelta
+
 #init, do not touch
-app = Flask(__name__,
-template_folder=os.path.abspath(Config.TEMPLATE_FOLDER),
-static_folder=os.path.abspath(Config.STATIC_FOLDER))
+app = Flask(
+    __name__,
+    template_folder=os.path.abspath(Config.TEMPLATE_FOLDER),
+    static_folder=os.path.abspath(Config.STATIC_FOLDER)
+)
+
 app.config.from_object(Config)
 db.init_app(app)
 
@@ -94,15 +97,18 @@ def kolo():
     }
     
     resp = make_response(render_template("kolo.html",finalvisual = finalvisual, finalmusic = finalmusic, finaldance = finaldance, finaltheatre = finaltheatre , **context))
-    return resp 
+    return resp
+ 
 @app.route('/')
 def index():
     resp = make_response(render_template("index.html"))
-    return resp 
+    return resp
+
 @app.route('/drawing')
 def drawing():
     resp = make_response(render_template("drawing.html"))
-    return resp 
+    return resp
+
 @app.route('/day')
 def day():
     current = images.query.first()
@@ -145,7 +151,8 @@ def day():
     }
     
     resp = make_response(render_template("day.html", **context))
-    return resp 
+    return resp
+
 # Create a namespace for the API
 api(app=app)
 """@app.route('/upload', methods=['POST'])

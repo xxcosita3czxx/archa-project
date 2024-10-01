@@ -28,11 +28,11 @@
                 <a class="nav-item nav-link" href="/kolo">kolo umění</a>
                 <a class="nav-item nav-link" href="/drawing">kreslení</a>
                 <a class="nav-item nav-link" href="/day">umění dne</a>
+                <a class="nav-item nav-link" href="https://www.google.com/maps/place/ARCHA/@50.0895018,14.4340919,17z/data=!3m1!4b1!4m6!3m5!1s0x470b95cdb92cfe19:0xa28c02447c8e37d2!8m2!3d50.0895018!4d14.4340919!16s/g/11vspg0vlb?entry=ttu&g_ep=EgoyMDI0MDkyNS4wIKXMDSoASAFQAw%3D%3D" target="_blank">mapa</a> <!-- Odkaz na mapy -->
             </div>
         </div>
     </nav>
 
-    <audio id="clickSound" src="click-button.mp3"></audio>
     <h1 class="text-center mt-4">Hlavní stránka</h1>
 
     <!-- Bootstrap JS a Popper.js -->
@@ -51,17 +51,5 @@
         &q=Divadlo+Archa,Praha+Czech+Republic">
     </iframe>
     <!-- Ovládání zvuku na kliknutí na odkazy v navbaru -->
-    <script>
-        // Přidání event listeneru na všechny odkazy v navbaru
-        const links = document.querySelectorAll('.navbar-nav .nav-link');
-        const clickSound = document.getElementById('clickSound');
-
-        links.forEach(link => {
-            link.addEventListener('click', function() {
-                clickSound.currentTime = 0; // Restart zvuku
-                clickSound.play(); // Přehrání zvuku
-            });
-        });
-    </script>
 </body>
 </html>
