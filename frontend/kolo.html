@@ -10,6 +10,7 @@
         /* Centering the title above the wheel */
         h1 {
             text-align: center;
+            transform: translateY(-400%);
             margin-bottom: 20px; /* Space between the title and the wheel */
         }
 
@@ -18,11 +19,16 @@
             color: #ffffff; 
         }
 
+        /* Move everything up by 10% */
+        body {
+        }
+
         .wheel-container {
             position: relative;
             width: 200px;
             height: 200px;
             margin: 0 auto;
+            transform: translateY(-50%);
         }
         .wheel {
             width: 100%;
@@ -46,11 +52,14 @@
             display: inline-block;
             transform-origin: center;
         }
+        .button {
+            transform: translateY(-120%);
+        }
         .arrow {
             position: absolute;
             top: 43%;
             right: -30px;
-            transform: translateY(-50%);
+            transform: translateY(-750%);
             width: 0;
             height: 0;
             border-top: 15px solid transparent;
@@ -63,20 +72,41 @@
             background-color: #1f1f1f; /* Set background same as body */
             border: 1px solid #ffffff; /* Optional border */
         }
+
+        @media (max-width: 991px) {
+            .navbar-collapse {
+                position: absolute;
+                top: 100%;
+                right: 0;
+                padding: 1rem;
+                background-color: #1f1f1f;
+                z-index: 1000;
+            }
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-color: #1f1f1f">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbar">
-            <div class="navbar-nav">
-                <a class="nav-item nav-link" href="/">Home</a>
-                <a class="nav-item nav-link" href="/kolo">kolo umění</a>
-                <a class="nav-item nav-link" href="/drawing">kreslení</a>
-                <a class="nav-item nav-link" href="/day">umění dne</a>
-                <a class="nav-item nav-link" href="https://www.google.com/maps/place/ARCHA/@50.0895018,14.4340919,17z/data=!3m1!4b1!4m6!3m5!1s0x470b95cdb92cfe19:0xa28c02447c8e37d2!8m2!3d50.0895018!4d14.4340919!16s/g/11vspg0vlb?entry=ttu&g_ep=EgoyMDI0MDkyNS4wIKXMDSoASAFQAw%3D%3D" target="_blank">mapa</a> <!-- Odkaz na mapy -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark " style="background-color: #1f1f1f">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="https://archa-plus.cz/cz/" target="_blank">
+                <img src="https://cdn.discordapp.com/attachments/1288179213492424798/1290514725268099072/ARCHAlogo_negativ.png?ex=66fcbcff&is=66fb6b7f&hm=431906f2faf662dd1a9f9820873a617488b585bd1d80315df4fab65863526cb0&" alt="ARCHA logo" style="height: 50px;">
+            </a>
+            <button
+                class="navbar-toggler ms-auto"
+                type="button"
+                data-bs-toggle="collapse"  
+                data-bs-target="#navbar"    
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbar">
+                <div class="navbar-nav ms-auto text-end"> <!-- Added text-end for right alignment -->
+                    <a class="nav-item nav-link" href="/">Home</a>
+                    <a class="nav-item nav-link" href="/kolo">kolo umění</a>
+                    <a class="nav-item nav-link" href="/drawing">kreslení</a>
+                    <a class="nav-item nav-link" href="/day">umění dne</a>
+                    <a class="nav-item nav-link" href="https://www.google.com/maps/place/ARCHA/@50.0895018,14.4340919,17z/data=!3m1!4b1!4m6!3m5!1s0x470b95cdb92cfe19:0xa28c02447c8e37d2!8m2!3d50.0895018!4d14.4340919!16s/g/11vspg0vlb?entry=ttu&g_ep=EgoyMDI0MDkyNS4wIKXMDSoASAFQAw%3D%3D" target="_blank">mapa</a>
+                </div>
             </div>
         </div>
     </nav>
@@ -101,7 +131,7 @@
                 </div>
                 <div class="arrow"></div>
             </div>
-            <button id="spinButton" class="btn btn-success btn-lg mb-4">Zatoč pro úkol!</button>
+            <button id="spinButton" class="button btn btn-success btn-lg mb-4">Zatoč pro úkol!</button>
             <div id="challengeContainer" class="card" style="display: none;">
                 <div class="card-body">
                     <h5 id="challengeText" class="card-title"></h5>
@@ -110,19 +140,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Audio elements for sound effects -->
-    <audio id="wheelSound">
-        <source src="wheel.mp3" type="audio/mpeg">
-    </audio>
-
-    <audio id="applauseSound">
-        <source src="applaus.mp3" type="audio/mpeg">
-    </audio>
-
-    <audio id="buttonSound">
-        <source src="click-button.mp3" type="audio/mpeg">
-    </audio>
 
     <!-- Bootstrap JS and Popper.js -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
