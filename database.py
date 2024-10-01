@@ -22,8 +22,8 @@ class musics(db.Model):
     task: Mapped[str] = mapped_column(db.String, nullable=False)
 class images(db.Model):
     id: Mapped[int] = mapped_column(db.Integer, primary_key=True, autoincrement=True)
-    link: Mapped[str] = mapped_column(db.String, nullable=False)
-
+    prompt: Mapped[str] = mapped_column(db.String, nullable=False)
+    enddate: Mapped[str] = mapped_column(db.String, nullable=False)
 class test(db.Model):
     id: Mapped[int] = mapped_column(db.Integer, primary_key=True, autoincrement=True)
     huewhg: Mapped[str] = mapped_column(db.String, nullable=False)
