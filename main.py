@@ -33,7 +33,7 @@ def newprompt():
             endtime=nowtime,
             prompt = prompt
         )
-newprompt
+newprompt()
 @app.route('/kolo')
 def kolo():
     dancesl = []
