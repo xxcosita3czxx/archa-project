@@ -65,14 +65,14 @@
         /* Media Query for smaller screens */
         @media (max-width: 768px) {
             .img-canvas-container {
-                flex-direction: column; /* Stack them on small screens */
+                flex-direction: column;
             }
             .img-container, .canvas-container {
-                width: 100%; /* Make them full width */
-                margin: 0; /* Remove margin */
+                width: 100%;
+                margin: 0;
             }
             .img-container {
-                margin-bottom: 10px; /* Add a margin below the image for spacing */
+                margin-bottom: 10px;
             }
         }
     </style>
@@ -140,67 +140,51 @@
         const ctx = canvas.getContext('2d');
 
         let currentColor = '#000000';
-        const pixelSize = 5;
+        const pixelSize = 10;  // Size of each pixel
         let bucketMode = false; // Bucket mode initially off
         let isDrawing = false; // To track if drawing is active
-    
-<<<<<<< HEAD
-        function loadImage(imageSrc) {
-            img.onload = function() {
-                canvas.width = img.width/3;
-                canvas.height = img.height/3;
-                drawGrid();
-            };
-            img.src = imageSrc;
-        }
-=======
-        // Array of image sources
-        const images = [
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/450px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/800px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg/330px-Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg",
-            "https://i.ytimg.com/vi/8vMd-jqj9R0/maxresdefault.jpg"
-        ];
-    
-        // Randomly select an image from the array
-        const randomImage = images[Math.floor(Math.random() * images.length)];
-        img.src = randomImage;
 
-        // Background music logic
-        let lastTrackIndex = -1;
+    // Randomly select an image from the array
+    const images = [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/450px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/800px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg/330px-Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg",
+        "https://i.ytimg.com/vi/8vMd-jqj9R0/maxresdefault.jpg"
+    ];
 
-        function playMusic() {
-            let audio = new Audio();
-            function playNextTrack() {
-                let trackIndex;
-                do {
-                    trackIndex = Math.floor(Math.random() * audioTracks.length);
-                } while (trackIndex === lastTrackIndex);
+    // Initialize the last image index
+    let lastImageIndex = -1;
 
-                lastTrackIndex = trackIndex;
-                audio.src = audioTracks[trackIndex];
-                audio.play();
-                audio.onended = playNextTrack; // Play next track when current ends
-            }
-            playNextTrack();
-        }
+    function getRandomImage() {
+        let newImageIndex;
 
-        // Start playing music
-        playMusic();
+        // Keep generating a new index until it's different from the last
+        do {
+            newImageIndex = Math.floor(Math.random() * images.length);
+        } while (newImageIndex === lastImageIndex);
+
+        // Update lastImageIndex and return the new image
+        lastImageIndex = newImageIndex;
+        return images[newImageIndex];
+    }
+
+    // Set the image source to a random image
+    img.src = getRandomImage();
+
+    img.onload = function() {
+        // Set the canvas size to match the loaded image size
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.fillStyle = 'white'; // Set canvas background to white
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        drawGrid();
+    };
 
         document.getElementById('fillBucketContainer').addEventListener('click', () => {
             bucketMode = !bucketMode; // Toggle the bucket mode
             const bucketStatus = document.getElementById('bucketStatus');
             bucketStatus.style.backgroundColor = bucketMode ? 'red' : 'green';
         });
-
-        img.onload = function() {
-            canvas.width = img.width;
-            canvas.height = img.height;
-            ctx.fillStyle = 'white'; // Change to 'rgba(255, 255, 255, 0)' for a transparent background
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            drawGrid();
-        };
 
         document.querySelectorAll('.color').forEach(color => {
             color.addEventListener('click', function() {
@@ -225,67 +209,37 @@
 
         function startDrawing(e) {
             isDrawing = true;
-            draw(e);
+            fillPixel(e);
         }
 
         function draw(e) {
             if (!isDrawing) return;
+            fillPixel(e);
+        }
+
+        function fillPixel(e) {
             const rect = canvas.getBoundingClientRect();
-            const x = Math.floor((e.clientX || e.touches[0].clientX - rect.left) / pixelSize) * pixelSize;
-            const y = Math.floor((e.clientY || e.touches[0].clientY - rect.top) / pixelSize) * pixelSize;
-            drawPixel(x, y);
-        }
-        
-        function fillBucket(x, y) {
-            const imgData = ctx.getImageData(x, y, 1, 1);
-            const targetColor = `rgba(${imgData.data[0]}, ${imgData.data[1]}, ${imgData.data[2]}, ${imgData.data[3]})`;
-            const newColor = currentColor;
-        
-            if (targetColor !== newColor) {
-                floodFill(x, y, targetColor, newColor);
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            if (bucketMode) {
+                floodFill(x, y, currentColor);
+            } else {
+                const pixelX = Math.floor(x / pixelSize) * pixelSize;
+                const pixelY = Math.floor(y / pixelSize) * pixelSize;
+                ctx.fillStyle = currentColor;
+                ctx.fillRect(pixelX, pixelY, pixelSize, pixelSize);
             }
-        }
-    
-        function floodFill(x, y, targetColor, newColor) {
-            const pixelStack = [[x, y]];
-            const width = canvas.width;
-            const height = canvas.height;
-            const imageData = ctx.getImageData(0, 0, width, height);
-            const data = imageData.data;
-    
-            function getPixelIndex(x, y) {
-                return (y * width + x) * 4;
-            }
-        
-            while (pixelStack.length) {
-                const newPos = pixelStack.pop();
-                const x = newPos[0];
-                const y = newPos[1];
-                const pixelIndex = getPixelIndex(x, y);
-    
-                if (x < 0 || x >= width || y < 0 || y >= height) continue;
-                if (data[pixelIndex] === targetColor[0] && data[pixelIndex + 1] === targetColor[1] && data[pixelIndex + 2] === targetColor[2] && data[pixelIndex + 3] === targetColor[3]) {
-                    data[pixelIndex] = newColor[0];
-                    data[pixelIndex + 1] = newColor[1];
-                    data[pixelIndex + 2] = newColor[2];
-                    data[pixelIndex + 3] = newColor[3];
-    
-                    pixelStack.push([x + 1, y]);
-                    pixelStack.push([x - 1, y]);
-                    pixelStack.push([x, y + 1]);
-                    pixelStack.push([x, y - 1]);
-                }
-            }
-    
-            ctx.putImageData(imageData, 0, 0);
         }
 
         function stopDrawing() {
             isDrawing = false;
         }
 
+        // Draw grid
         function drawGrid() {
             ctx.strokeStyle = 'lightgray';
+            ctx.lineWidth = 0.5;
             for (let x = 0; x < canvas.width; x += pixelSize) {
                 ctx.beginPath();
                 ctx.moveTo(x, 0);
@@ -300,20 +254,93 @@
             }
         }
 
-        document.getElementById('sendImagesBtn').addEventListener('click', function() {
-            const confirmation = document.getElementById('confirmation');
-            confirmation.style.display = 'none';
+        function floodFill(x, y, fillColor) {
+            x = Math.floor(x / pixelSize) * pixelSize;
+            y = Math.floor(y / pixelSize) * pixelSize;
+            
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const targetColor = getPixelColor(imageData, x, y);
 
-            // Convert the canvas to an image
-            const canvasData = canvas.toDataURL();
+            if (colorMatch(targetColor, fillColor)) return;
+
+            const pixelsToCheck = [x, y];
+            while (pixelsToCheck.length > 0) {
+                const y = pixelsToCheck.pop();
+                const x = pixelsToCheck.pop();
+
+                const currentColor = getPixelColor(imageData, x, y);
+                if (colorMatch(currentColor, targetColor)) {
+                    ctx.fillStyle = fillColor;
+                    ctx.fillRect(x, y, pixelSize, pixelSize);
+                    setPixelColor(imageData, x, y, fillColor);
+
+                    if (x > 0) pixelsToCheck.push(x - pixelSize, y);
+                    if (y > 0) pixelsToCheck.push(x, y - pixelSize);
+                    if (x < canvas.width - pixelSize) pixelsToCheck.push(x + pixelSize, y);
+                    if (y < canvas.height - pixelSize) pixelsToCheck.push(x, y + pixelSize);
+                }
+            }
+        }
+
+        function getPixelColor(imageData, x, y) {
+            const index = (y * canvas.width + x) * 4;
+            return {
+                r: imageData.data[index],
+                g: imageData.data[index + 1],
+                b: imageData.data[index + 2],
+                a: imageData.data[index + 3]
+            };
+        }
+
+        function setPixelColor(imageData, x, y, color) {
+            const index = (y * canvas.width + x) * 4;
+            const rgb = hexToRgb(color);
+            imageData.data[index] = rgb.r;
+            imageData.data[index + 1] = rgb.g;
+            imageData.data[index + 2] = rgb.b;
+            imageData.data[index + 3] = 255;
+        }
+
+        function colorMatch(color1, color2) {
+            if (typeof color2 === 'string') {
+                color2 = hexToRgb(color2);
+            }
+            return color1.r === color2.r && color1.g === color2.g && color1.b === color2.b;
+        }
+
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+
+        // Send images to backend
+        document.getElementById('sendImagesBtn').addEventListener('click', () => {
+            const drawingData = canvas.toDataURL('image/png');
             const imageData = img.src;
-
-            // Send the image and drawing to the server (here, just logging it)
-            console.log('Sending data:', { image: imageData, drawing: canvasData });
-
-            // Show confirmation message
-            confirmation.innerText = 'Images have been sent successfully!';
-            confirmation.style.display = 'block';
+            // Use fetch or XMLHttpRequest to send both images to the backend
+            fetch('/upload', {
+                method: 'POST',
+                body: JSON.stringify({ drawing: drawingData, image: imageData }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById('confirmation').textContent = 'Images sent successfully!';
+                } else {
+                    document.getElementById('confirmation').textContent = 'Failed to send images.';
+                }
+                document.getElementById('confirmation').style.display = 'block';
+            })
+            .catch(error => {
+                document.getElementById('confirmation').textContent = 'Error: ' + error;
+                document.getElementById('confirmation').style.display = 'block';
+            });
         });
     </script>
 </body>
