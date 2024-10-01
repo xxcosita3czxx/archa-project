@@ -188,5 +188,9 @@ def upload():
         "similarity": f"{adjusted_similarity_percentage:.2f}%",  # Format similarity to 2 decimal places
         "message": "Images processed successfully."
     })
-if __name__ == '__main__':
+
+def main():
     app.run(debug=True)
+
+if __name__ == '__main__':
+    main()
