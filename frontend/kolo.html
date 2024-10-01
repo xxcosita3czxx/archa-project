@@ -8,9 +8,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         /* Centering the title above the wheel */
+        .card{
+            transform: translateY(-75%);
+        }
         h1 {
             text-align: center;
-            transform: translateY(-400%);
+            transform: translateY(-490%);
             margin-bottom: 20px; /* Space between the title and the wheel */
         }
 
@@ -24,7 +27,7 @@
             width: 200px;
             height: 200px;
             margin: 0 auto;
-            transform: translateY(-50%);
+            transform: translateY(-70%);
         }
         .wheel {
             width: 100%;
@@ -49,7 +52,7 @@
             transform-origin: center;
         }
         .button {
-            transform: translateY(-120%);
+            transform: translateY(-270%);
         }
         .arrow {
             position: absolute;
@@ -129,7 +132,7 @@
                 </div>
                 <div class="arrow"></div>
             </div>
-            <button id="spinButton" class="button btn btn-success btn-lg mb-4">Zatoč pro úkol!</button>
+            <button id="spinButton" class="button btn btn-success btn-lg ">Zatoč pro úkol!</button>
             <div id="challengeContainer" class="card" style="display: none;">
                 <div class="card-body">
                     <h5 id="challengeText" class="card-title"></h5>
@@ -188,6 +191,8 @@
     let spinning = false;
 
     let currentRotation = 0;  // Keep track of the current rotation
+
+    spinButton.addEventListener('click', spinWheel);
 
     function spinWheel() {
         if (spinning) return;
