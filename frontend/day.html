@@ -12,45 +12,50 @@
             color: #ffffff;
             margin: 0;
         }
+        .navbar {
+            background-color: #ff3c00;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding: 5px;
+            z-index: 1000;
+        }
+        .nav-link {
+            color: white !important;
+            font-size: 0.8rem;
+            padding: 0.25rem !important;
+            text-align: center;
+        }
+        .navbar-brand {
+            position: absolute;
+            right: -10px;
+            top: 100%;
+            transform: translateY(-50%);
+        }
         .responsive-img {
             width: 100%; /* Full width */
             height: auto; /* Maintain aspect ratio */
         }
-        @media (max-width: 991px) {
-            .navbar-collapse {
-                position: absolute;
-                top: 100%;
-                right: 0;
-                padding: 1rem;
-                background-color: #1f1f1f;
-                z-index: 1000;
-            }
+        @media (max-width: 350px) {
+            .nav-link {
+            font-size: 0.7rem;
+        }
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-color: #1f1f1f">
-        <div class="container-fluid">
+    <nav class="navbar navbar-dark">
+        <div class="container-fluid p-0">
+            <ul class="navbar-nav d-flex flex-row justify-content-between w-100">
+                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/kolo">Kolo&nbsp;štěstí</a></li>
+                <li class="nav-item"><a class="nav-link" href="/drawing">Kreslení</a></li>
+                <li class="nav-item"><a class="nav-link" href="/day">Umění&nbsp;dne</a></li>
+                <li class="nav-item"><a class="nav-link" href="https://www.google.com/maps/place/ARCHA/@50.0895018,14.4340919,17z/" target="_blank">Mapa</a></li>
+            </ul>
             <a class="navbar-brand" href="https://archa-plus.cz/cz/" target="_blank">
                 <img src="https://cdn.discordapp.com/attachments/1288179213492424798/1290514725268099072/ARCHAlogo_negativ.png?ex=66fcbcff&is=66fb6b7f&hm=431906f2faf662dd1a9f9820873a617488b585bd1d80315df4fab65863526cb0&" alt="ARCHA logo" style="height: 50px;">
             </a>
-            <button
-                class="navbar-toggler ms-auto"
-                type="button"
-                data-bs-toggle="collapse"  
-                data-bs-target="#navbar"    
-            >
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbar">
-                <div class="navbar-nav ms-auto text-end"> <!-- Added text-end for right alignment -->
-                    <a class="nav-item nav-link" href="/">Home</a>
-                    <a class="nav-item nav-link" href="/kolo">kolo umění</a>
-                    <a class="nav-item nav-link" href="/drawing">kreslení</a>
-                    <a class="nav-item nav-link" href="/day">umění dne</a>
-                    <a class="nav-item nav-link" href="https://www.google.com/maps/place/ARCHA/@50.0895018,14.4340919,17z/data=!3m1!4b1!4m6!3m5!1s0x470b95cdb92cfe19:0xa28c02447c8e37d2!8m2!3d50.0895018!4d14.4340919!16s/g/11vspg0vlb?entry=ttu&g_ep=EgoyMDI0MDkyNS4wIKXMDSoASAFQAw%3D%3D" target="_blank">mapa</a>
-                </div>
-            </div>
         </div>
     </nav>
     <!-- Main content -->
