@@ -33,7 +33,6 @@
         </div>
     </nav>
 
-    <audio id="clickSound" src="click-button.mp3"></audio>
     <h1 class="text-center mt-4">Hlavní stránka</h1>
 
     <!-- Bootstrap JS a Popper.js -->
@@ -52,17 +51,5 @@
         &q=Divadlo+Archa,Praha+Czech+Republic">
     </iframe>
     <!-- Ovládání zvuku na kliknutí na odkazy v navbaru -->
-    <script>
-        // Přidání event listeneru na všechny odkazy v navbaru
-        const links = document.querySelectorAll('.navbar-nav .nav-link');
-        const clickSound = document.getElementById('clickSound');
-
-        links.forEach(link => {
-            link.addEventListener('click', function() {
-                clickSound.currentTime = 0; // Restart zvuku
-                clickSound.play(); // Přehrání zvuku
-            });
-        });
-    </script>
 </body>
 </html>

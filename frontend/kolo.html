@@ -54,13 +54,13 @@
         .arrow {
             position: absolute;
             top: 43%;
-            right: -30px;
+            right: -20px;
             transform: translateY(-750%);
             width: 0;
             height: 0;
             border-top: 15px solid transparent;
             border-bottom: 15px solid transparent;
-            border-left: 30px solid #fff;
+            border-left: 30px solid #ff0000;
             transform: rotate(180deg);
         }
 
@@ -185,27 +185,13 @@
     const challengeText = document.getElementById('challengeText');
     const challenge = document.getElementById('challenge');
 
-    const wheelSound = document.getElementById('wheelSound');
-    const applauseSound = document.getElementById('applauseSound');
-    const buttonSound = document.getElementById('buttonSound'); // Button sound element
-
     let spinning = false;
-
-    spinButton.addEventListener('click', () => {
-        buttonSound.currentTime = 0; // Reset sound to start
-        buttonSound.play(); // Play button sound
-        spinWheel(); // Call spinWheel function
-    });
 
     let currentRotation = 0;  // Keep track of the current rotation
 
     function spinWheel() {
         if (spinning) return;
         spinning = true;
-
-        // Play the wheel sound effect
-        wheelSound.currentTime = 0; // Reset sound to start
-        wheelSound.play();
 
         // Generate a random degree between 720 and 1080 (2-3 full rotations)
         const randomDegree = Math.floor(Math.random() * 360) + 720;
@@ -218,10 +204,6 @@
 
         setTimeout(() => {
             spinning = false;
-
-            // Stop the wheel sound effect when the spinning is done
-            wheelSound.pause(); // Pause the wheel sound
-            wheelSound.currentTime = 0; // Reset to the beginning
 
             // Calculate the final rotation within the 360-degree range
             let finalRotation = currentRotation % 360;
@@ -258,9 +240,6 @@
     
         challengeContainer.style.display = 'block';
     
-        // Play applause sound effect
-        applauseSound.currentTime = 0; // Reset sound to start
-        applauseSound.play();
     }
     </script>
 </body>
