@@ -21,19 +21,8 @@ template_folder=os.path.abspath(Config.TEMPLATE_FOLDER),
 static_folder=os.path.abspath(Config.STATIC_FOLDER))
 app.config.from_object(Config)
 db.init_app(app)
-def newprompt():
-    if not images.query.first():
-        nowtime = datetime.now()
-        nowtime = nowtime.replace(hour=23, minute=59, second=59, microsecond=0)
-        prompt = ""
-        r = RandomWords()
-        for i in range(random.randrange(1,5)):
-            prompt += r.get_random_word() + "_"
-        images(
-            endtime=nowtime,
-            prompt = prompt
-        )
-newprompt()
+
+    
 @app.route('/kolo')
 def kolo():
     dancesl = []
@@ -116,10 +105,33 @@ def drawing():
     return resp 
 @app.route('/day')
 def day():
-    prompt = ""
-    r = RandomWords()
-    for i in range(random.randrange(1,5)):
-        prompt += r.get_random_word() + "_"
+    current = images.query.first()
+    nowtime = datetime.now()
+    if not current:
+        
+        nowtime = nowtime.replace(hour=23, minute=59, second=59, microsecond=0)
+        prompt = ""
+        r = RandomWords()
+        for i in range(random.randrange(1,5)):
+            prompt += r.get_random_word() + "_"
+        images(
+            enddate=nowtime,
+            prompt = prompt
+        )
+    else:
+        endtime = endtime = datetime.strptime(current.enddate, "%Y-%m-%d %H:%M:%S.%f")
+        if endtime < nowtime:
+            nowtime = nowtime.replace(hour=23, minute=59, second=59, microsecond=0)
+            prompt = "" 
+            r = RandomWords()
+            for i in range(random.randrange(1,5)):
+                prompt += r.get_random_word() + "_"
+            images(
+                enddate=nowtime,
+                prompt = prompt
+            )
+    db.session.commit()
+    
     context = {
         "dayprompt":prompt
     }
