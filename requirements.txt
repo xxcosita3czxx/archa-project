@@ -1,0 +1,6 @@
+scikit-image
+flask
+flask_restx
+sqlalchemy
+flask_sqlalchemy
+random_word
